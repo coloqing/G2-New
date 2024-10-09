@@ -947,160 +947,121 @@ namespace KAFKA_PARSE
         //}
 
         /// <summary>
-        /// 压缩机异常预警模型
+        /// 制冷系统压力异常预警模型
         /// </summary>
         /// <returns></returns>
         private async Task GetYsjFault()
         {
-            OVERHAULIDEA pqWarn1, pqWarn2, xqWarn1, xqWarn2, gyWarn1, gyWarn2, dyWarn1, dyWarn2;
+            OVERHAULIDEA jz1Warn1, jz1Warn2, jz2Warn1, jz2Warn2, gyWarn1, gyWarn2, dyWarn1, dyWarn2;
             var addFaults = new List<FAULTWARN>();
 
             var config = _db.Queryable<SYS_CONFIG>().ToList();
             var nowData = _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToList();
             var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
             var faultData = _db.Queryable<FAULTWARN>().ToList();
+            var lchs = _db.Queryable<LCH>().ToList();
+            var cxhs = _db.Queryable<CXH>().ToList();
 
             string sql = @"SELECT * FROM
 							    dbo.TB_PARSING_DATAS_YJ_2" + $"_{DateTime.Now:yyyyMMdd} " +
                          @"WHERE
-								create_time >= DATEADD(MINUTE,-30,GETDATE())";
+								create_time >= DATEADD(MINUTE,-5,GETDATE())";
 
             var newDatas = await _db.SqlQueryable<TB_PARSING_DATAS_YJ_2>(sql).ToListAsync();
             if (newDatas.Count == 0) return;
 
+            var jz1ysj1zt = !newDatas.Any(x => x.jz1ysj1yx == "0");
+            var jz1ysj2zt = !newDatas.Any(x => x.jz1ysj2yx == "0");
+            var jz2ysj1zt = !newDatas.Any(x => x.jz2ysj1yx == "0");
+            var jz2ysj2zt = !newDatas.Any(x => x.jz2ysj2yx == "0");
+            
+            jz1Warn1 = equipments.First(x => x.faultcode == "1x07036");
+            jz1Warn2 = equipments.First(x => x.faultcode == "1x07037");
+
+            jz2Warn1 = equipments.First(x => x.faultcode == "1x07038");
+            jz2Warn2 = equipments.First(x => x.faultcode == "1x07039");
+
+            var time = DateTime.Now.AddMinutes(-3);
+
+            var data3minute = newDatas.Where(x => x.create_time >= time);
+
             foreach (var item in nowData)
-            {
+            {           
+                var ysjdata = data3minute.Where(x => x.device_code == item.device_code);
+                             
+                //var pq1 = data.Any(x => x.jz1ysj1pqwd > 125 || x.jz1ysj1pqwd < 30);
+                //var pq2 = data.Any(x => x.jz1ysj2pqwd > 125 || x.jz1ysj2pqwd < 30);
 
-                //pqWarn1 = equipments.First(x => x.FaultCode == "hvac1014150001");
-                //pqWarn2 = equipments.First(x => x.FaultCode == "hvac1014150002");
+                //var xq1 = data.Any(x => x.jz1ysj1xqwd < -10 || x.jz1ysj1xqwd > 40);
+                //var xq2 = data.Any(x => x.jz1ysj2xqwd < -10 || x.jz1ysj2xqwd > 40);
 
-                //xqWarn1 = equipments.First(x => x.FaultCode == "hvac1014160001");
-                //xqWarn2 = equipments.First(x => x.FaultCode == "hvac1014160002");
+                var jz1ysj1 = ysjdata.Any(x => (Convert.ToInt32(x.jz1zlxt1gyylz) > 2900 && x.jz1zlxt1gycgqgz == "0")|| (Convert.ToInt32(x.jz1zlxt1dyylz) <= 150 && x.jz1zlxt1dycgqgz == "0"));
+                var jz1ysj2 = ysjdata.Any(x => (Convert.ToInt32(x.jz1zlxt2gyylz) > 2900 && x.jz1zlxt2gycgqgz == "0")|| (Convert.ToInt32(x.jz1zlxt2dyylz) <= 150 && x.jz1zlxt2dycgqgz == "0"));
+                var jz2ysj1 = ysjdata.Any(x => (Convert.ToInt32(x.jz2zlxt1gyylz) > 2900 && x.jz2zlxt1gycgqgz == "0")|| (Convert.ToInt32(x.jz2zlxt1dyylz) <= 150 && x.jz2zlxt1dycgqgz == "0"));
+                var jz2ysj2 = ysjdata.Any(x => (Convert.ToInt32(x.jz2zlxt2gyylz) > 2900 && x.jz2zlxt2gycgqgz == "0")|| (Convert.ToInt32(x.jz2zlxt2dyylz) <= 150 && x.jz2zlxt2dycgqgz == "0"));
+                
+                //var dy1 = ysjdata.Any(x => x.jz1ysj1dyyl < 300 || x.jz1ysj1dyyl > 800);
+                //var dy2 = ysjdata.Any(x => x.jz1ysj2dyyl < 300 || x.jz1ysj2dyyl > 800);
 
-                11Warn1 = equipments.First(x => x.faultcode == "1x07036");
-                12Warn2 = equipments.First(x => x.faultcode == "1x07037");
+                //var pq1F = faultData.Any(x => x.Code == pqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
+                //var pq2F = faultData.Any(x => x.Code == pqWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
 
-                21Warn1 = equipments.First(x => x.faultcode == "1x07038");
-                22Warn2 = equipments.First(x => x.faultcode == "1x07039");
+                //var xq1F = faultData.Any(x => x.Code == xqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
+                //var xq2F = faultData.Any(x => x.Code == xqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
 
-                //pqWarn1 = equipments.First(x => x.FaultCode == "hvac1014150003");
-                //pqWarn2 = equipments.First(x => x.FaultCode == "hvac1014150004");
+                var jz1w1F = !faultData.Any(x => x.xdid == jz1Warn1.id && x.state == "0" && x.sbbm == item.device_code);
+                var jz1w2F = !faultData.Any(x => x.xdid == jz1Warn2.id && x.state == "0" && x.sbbm == item.device_code);
 
-                //xqWarn1 = equipments.First(x => x.FaultCode == "hvac1014160003");
-                //xqWarn2 = equipments.First(x => x.FaultCode == "hvac1014160004");
+                var jz2w1F = !faultData.Any(x => x.xdid == jz2Warn1.id && x.state == "0" && x.sbbm == item.device_code);
+                var jz2w2F = !faultData.Any(x => x.xdid == jz2Warn2.id && x.state == "0" && x.sbbm == item.device_code);
 
-                //gyWarn1 = equipments.First(x => x.faultcode == "hvac1014020006");
-                //gyWarn2 = equipments.First(x => x.faultcode == "hvac1014020008");
+                var lcid = lchs.FirstOrDefault(x => x.lch == item.lch);
+                var cxid = cxhs.FirstOrDefault(x => x.lcid == lcid.id && x.cxh == item.cxh);
 
-                //dyWarn1 = equipments.First(x => x.faultcode == "hvac1014020002");
-                //dyWarn2 = equipments.First(x => x.faultcode == "hvac1014020004");
-
-
-                var time10 = item.create_time.AddMinutes(-11);
-                var time1 = item.create_time.AddMinutes(-1);
-
-                var ysj1data10 = newData.Any(x => x.create_time >= time10 && x.jz1ysj1zt == 0);
-                var ysj2data10 = newData.Any(x => x.create_time >= time10 && x.jz1ysjj2zt == 0);
-
-                var data = newData.Where(x => x.device_code == item.device_code && x.create_time >= time1 && x.create_time < item.update_time);
-
-                var pq1 = data.Any(x => x.jz1ysj1pqwd > 125 || x.jz1ysj1pqwd < 30);
-                var pq2 = data.Any(x => x.jz1ysj2pqwd > 125 || x.jz1ysj2pqwd < 30);
-
-                var xq1 = data.Any(x => x.jz1ysj1xqwd < -10 || x.jz1ysj1xqwd > 40);
-                var xq2 = data.Any(x => x.jz1ysj2xqwd < -10 || x.jz1ysj2xqwd > 40);
-
-                var gy1 = data.Any(x => x.jz1ysj1gyyl < 1000 || x.jz1ysj1gyyl > 3000);
-                var gy2 = data.Any(x => x.jz1ysj2gyyl < 1000 || x.jz1ysj2gyyl > 3000);
-
-                var dy1 = data.Any(x => x.jz1ysj1dyyl < 300 || x.jz1ysj1dyyl > 800);
-                var dy2 = data.Any(x => x.jz1ysj2dyyl < 300 || x.jz1ysj2dyyl > 800);
-
-                var pq1F = faultData.Any(x => x.Code == pqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-                var pq2F = faultData.Any(x => x.Code == pqWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-                var xq1F = faultData.Any(x => x.Code == xqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-                var xq2F = faultData.Any(x => x.Code == xqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-                var gy1F = faultData.Any(x => x.Code == gyWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-                var gy2F = faultData.Any(x => x.Code == gyWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-                var dy1F = faultData.Any(x => x.Code == dyWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-                var dy2F = faultData.Any(x => x.Code == dyWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-
-                var addfault = new FaultOrWarn
+                var addfault = new FAULTWARN
                 {
-                    xlh = XL,
+                    line_id = Convert.ToInt32(lcid.xl_id),
                     lch = item.lch,
+                    lcid = lcid.id,
+                    cxid = cxid.id,
                     cxh = item.cxh,
-                    DeviceCode = item.device_code,
-                    Type = "2",
-                    State = "1",
-                    createtime = item.update_time
+                    sbid = (int?)item.id,
+                    sbbm = item.device_code,                  
+                    state = "0",                 
+                    collect_time = DateTime.Now,
+                    createtime = DateTime.Now
                 };
 
-                if (!ysj1data10 && pq1 && !pq1F)
+                if (jz1ysj1zt && jz1ysj1 && jz1w1F)
                 {
-                    addfault.Code = pqWarn1.FaultCode;
-                    addfault.Name = pqWarn1.FaultName;
-                    addfault.FaultType = pqWarn1.Type;
+                    addfault.xdid = jz1Warn1.id;
+                    addfault.type = jz1Warn1.type;
+                    addfault.xdmc = jz1Warn1.jxname;
+                    addfault.gzjb = jz1Warn1.gzdj;
                     addFaults.Add(addfault);
                 }
-
-                if (!ysj2data10 && pq2 && !pq2F)
+                if (jz1ysj2zt && jz1ysj2 && jz1w2F)
                 {
-                    addfault.Code = pqWarn2.FaultCode;
-                    addfault.Name = pqWarn2.FaultName;
-                    addfault.FaultType = pqWarn2.Type;
+                    addfault.xdid = jz1Warn1.id;
+                    addfault.type = jz1Warn1.type;
+                    addfault.xdmc = jz1Warn1.jxname;
+                    addfault.gzjb = jz1Warn1.gzdj;
                     addFaults.Add(addfault);
                 }
-
-                if (!ysj1data10 && xq1 && !xq1F)
+                if (jz2ysj1zt && jz2ysj1 && jz2w1F)
                 {
-                    addfault.Code = xqWarn1.FaultCode;
-                    addfault.Name = xqWarn1.FaultName;
-                    addfault.FaultType = xqWarn1.Type;
+                    addfault.xdid = jz1Warn1.id;
+                    addfault.type = jz1Warn1.type;
+                    addfault.xdmc = jz1Warn1.jxname;
+                    addfault.gzjb = jz1Warn1.gzdj;
                     addFaults.Add(addfault);
                 }
-
-                if (!ysj2data10 && xq2 && !xq2F)
+                if (jz2ysj2zt && jz2ysj2 && jz2w2F)
                 {
-                    addfault.Code = xqWarn2.FaultCode;
-                    addfault.Name = xqWarn2.FaultName;
-                    addfault.FaultType = xqWarn2.Type;
-                    addFaults.Add(addfault);
-                }
-
-                if (!ysj1data10 && gy1 && !gy1F)
-                {
-                    addfault.Code = gyWarn1.FaultCode;
-                    addfault.Name = gyWarn1.FaultName;
-                    addfault.FaultType = gyWarn1.Type;
-                    addFaults.Add(addfault);
-                }
-
-                if (!ysj2data10 && gy2 && !gy2F)
-                {
-                    addfault.Code = gyWarn2.FaultCode;
-                    addfault.Name = gyWarn2.FaultName;
-                    addfault.FaultType = gyWarn2.Type;
-                    addFaults.Add(addfault);
-                }
-
-                if (!ysj1data10 && dy1 && !dy1F)
-                {
-                    addfault.Code = dyWarn1.FaultCode;
-                    addfault.Name = dyWarn1.FaultName;
-                    addfault.FaultType = dyWarn1.Type;
-                    addFaults.Add(addfault);
-                }
-
-                if (!ysj2data10 && dy2 && !dy2F)
-                {
-                    addfault.Code = dyWarn2.FaultCode;
-                    addfault.Name = dyWarn2.FaultName;
-                    addfault.FaultType = dyWarn2.Type;
+                    addfault.xdid = jz1Warn1.id;
+                    addfault.type = jz1Warn1.type;
+                    addfault.xdmc = jz1Warn1.jxname;
+                    addfault.gzjb = jz1Warn1.gzdj;
                     addFaults.Add(addfault);
                 }
             }
@@ -1432,8 +1393,6 @@ namespace KAFKA_PARSE
                 var jz2ysjzt = !newDatas.Any(x => x.jz2ysj1yx == "0" && x.jz2ysj2yx == "0");//
                 
                 var time = DateTime.Now.AddMinutes(-5);
-
-                
 
                 foreach (var item in nowData)
                 {
