@@ -823,128 +823,128 @@ namespace KAFKA_PARSE
 
         #region 预警模型
         /// <summary>
-        /// 温度异常预警模型
+        /// 温度异常预警
         /// </summary>
         /// <returns></returns>
-        //private async Task GetWdFault()
-        //{
-        //    EquipmentFault xfWarn1, sfWarn1, sfWarn2, hfWarn1;
-        //    var addFaults = new List<FaultOrWarn>();
+        private async Task GetWdFault()
+        {
+            EquipmentFault xfWarn1, sfWarn1, sfWarn2, hfWarn1;
+            var addFaults = new List<FaultOrWarn>();
 
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    var faultData = _db.Queryable<FaultOrWarn>().ToList();
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
+            var config = _db.Queryable<SYS_CONFIG>().ToList();
+            var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
+            var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
+            var faultData = _db.Queryable<FaultOrWarn>().ToList();
+            //获取线路名称
+            var XL = config.Where(x => x.concode == _lineCode).First().conval;
 
-        //    var newData = await GetNewData("15");
-        //    if (newData.Count == 0) return;
+            var newData = await GetNewData("15");
+            if (newData.Count == 0) return;
 
-        //    foreach (var item in nowData)
-        //    {
-        //        if (item.yxtzjid == 1)
-        //        {
-        //            xfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030001");
+            foreach (var item in nowData)
+            {
+                if (item.yxtzjid == 1)
+                {
+                    xfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030001");
 
-        //            sfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030003");
-        //            sfWarn2 = equipments.First(x => x.FaultCode == "hvac1024030004");
+                    sfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030003");
+                    sfWarn2 = equipments.First(x => x.FaultCode == "hvac1024030004");
 
-        //            hfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030002");            
-        //        }
-        //        else
-        //        {
-        //            xfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030005");
+                    hfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030002");
+                }
+                else
+                {
+                    xfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030005");
 
-        //            sfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030007");
-        //            sfWarn2 = equipments.First(x => x.FaultCode == "hvac1024030008");
+                    sfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030007");
+                    sfWarn2 = equipments.First(x => x.FaultCode == "hvac1024030008");
 
-        //            hfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030006");                 
-        //        }
-
-
-        //        var time10 = item.create_time.AddMinutes(-11);
-        //        var time1 = item.create_time.AddMinutes(-1);
-
-        //        var data10 = newData.Any(x => x.create_time >= time10 && x.tfms == 7);
-
-        //        var data = newData.Where(x => x.device_code == item.device_code && x.create_time >= time1 && x.create_time < item.update_time);
-
-        //        var xf1 = data.Any(x => x.jz1swwd > 60 || x.jz1swwd < 0);
-        //        var xf1off = data.Any(x => x.jz1swwd > 70 || x.jz1swwd < -20);
+                    hfWarn1 = equipments.First(x => x.FaultCode == "hvac1024030006");
+                }
 
 
-        //        var sf1 = data.Any(x => x.jz1sfcgq1wd < -10 || x.jz1sfcgq1wd > 50);
-        //        var sf2 = data.Any(x => x.jz1sfcgq2wd < -10 || x.jz1sfcgq2wd > 50);
-        //        var hf1 = data.Any(x => x.jz1kswd < 0 || x.jz1kswdcgq1wd > 50 || x.jz1kswdcgq1wd < 0 || x.jz1kswdcgq1wd > 50);        
+                var time10 = item.create_time.AddMinutes(-11);
+                var time1 = item.create_time.AddMinutes(-1);
 
-        //        var xf1F = faultData.Any(x => x.Code == xfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);         
-        //        var sf1F = faultData.Any(x => x.Code == sfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-        //        var sf2F = faultData.Any(x => x.Code == sfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-        //        var hf1F = faultData.Any(x => x.Code == hfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
+                var data10 = newData.Any(x => x.create_time >= time10 && x.tfms == 7);
+
+                var data = newData.Where(x => x.device_code == item.device_code && x.create_time >= time1 && x.create_time < item.update_time);
+
+                var xf1 = data.Any(x => x.jz1swwd > 60 || x.jz1swwd < 0);
+                var xf1off = data.Any(x => x.jz1swwd > 70 || x.jz1swwd < -20);
 
 
-        //        var addfault = new FaultOrWarn
-        //        {
-        //            xlh = XL,
-        //            lch = item.lch,
-        //            cxh = item.cxh,
-        //            DeviceCode = item.device_code,
-        //            Type = "2",
-        //            State = "1",
-        //            createtime = item.update_time
-        //        };
+                var sf1 = data.Any(x => x.jz1sfcgq1wd < -10 || x.jz1sfcgq1wd > 50);
+                var sf2 = data.Any(x => x.jz1sfcgq2wd < -10 || x.jz1sfcgq2wd > 50);
+                var hf1 = data.Any(x => x.jz1kswd < 0 || x.jz1kswdcgq1wd > 50 || x.jz1kswdcgq1wd < 0 || x.jz1kswdcgq1wd > 50);
 
-        //        if (!data10 && xf1 && !xf1F)
-        //        {
-        //            addfault.Code = xfWarn1.FaultCode;
-        //            addfault.Name = xfWarn1.FaultName;
-        //            addfault.FaultType = xfWarn1.Type;
-        //            addFaults.Add(addfault);
-        //        }
+                var xf1F = faultData.Any(x => x.Code == xfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
+                var sf1F = faultData.Any(x => x.Code == sfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
+                var sf2F = faultData.Any(x => x.Code == sfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
+                var hf1F = faultData.Any(x => x.Code == hfWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
 
-        //        if (!data10 && sf1 && !sf2F)
-        //        {
-        //            addfault.Code = sfWarn1.FaultCode;
-        //            addfault.Name = sfWarn1.FaultName;
-        //            addfault.FaultType = sfWarn1.Type;
-        //            addFaults.Add(addfault);
-        //        }
 
-        //        if (!data10 && sf2 && !sf2F)
-        //        {
-        //            addfault.Code = sfWarn2.FaultCode;
-        //            addfault.Name = sfWarn2.FaultName;
-        //            addfault.FaultType = sfWarn2.Type;
-        //            addFaults.Add(addfault);
-        //        }
+                var addfault = new FaultOrWarn
+                {
+                    xlh = XL,
+                    lch = item.lch,
+                    cxh = item.cxh,
+                    DeviceCode = item.device_code,
+                    Type = "2",
+                    State = "1",
+                    createtime = item.update_time
+                };
 
-        //        if (!data10 && hf1 && !hf1F)
-        //        {
-        //            addfault.Code = hfWarn1.FaultCode;
-        //            addfault.Name = hfWarn1.FaultName;
-        //            addfault.FaultType = hfWarn1.Type;
-        //            addFaults.Add(addfault);
-        //        }
-        //    }
+                if (!data10 && xf1 && !xf1F)
+                {
+                    addfault.Code = xfWarn1.FaultCode;
+                    addfault.Name = xfWarn1.FaultName;
+                    addfault.FaultType = xfWarn1.Type;
+                    addFaults.Add(addfault);
+                }
 
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
+                if (!data10 && sf1 && !sf2F)
+                {
+                    addfault.Code = sfWarn1.FaultCode;
+                    addfault.Name = sfWarn1.FaultName;
+                    addfault.FaultType = sfWarn1.Type;
+                    addFaults.Add(addfault);
+                }
 
-        //        if (faultReq != null && faultReq.result_code == "200")
-        //        {
-        //            _logger.LogInformation($"温度异常预警推送成功，新增了{addFaults.Count}条预警");
+                if (!data10 && sf2 && !sf2F)
+                {
+                    addfault.Code = sfWarn2.FaultCode;
+                    addfault.Name = sfWarn2.FaultName;
+                    addfault.FaultType = sfWarn2.Type;
+                    addFaults.Add(addfault);
+                }
 
-        //            for (int i = 0; i < addFaults.Count; i++)
-        //            {
-        //                addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //            }
-        //        }
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //        _logger.LogInformation($"温度异常预警同步完成，新增了{addnum}条预警");
-        //    }
-        //}
+                if (!data10 && hf1 && !hf1F)
+                {
+                    addfault.Code = hfWarn1.FaultCode;
+                    addfault.Name = hfWarn1.FaultName;
+                    addfault.FaultType = hfWarn1.Type;
+                    addFaults.Add(addfault);
+                }
+            }
+
+            if (addFaults.Count > 0)
+            {
+                var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
+
+                if (faultReq != null && faultReq.result_code == "200")
+                {
+                    _logger.LogInformation($"温度异常预警推送成功，新增了{addFaults.Count}条预警");
+
+                    for (int i = 0; i < addFaults.Count; i++)
+                    {
+                        addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
+                    }
+                }
+                var addnum = _db.Insertable(addFaults).ExecuteCommand();
+                _logger.LogInformation($"温度异常预警同步完成，新增了{addnum}条预警");
+            }
+        }
 
         /// <summary>
         /// 制冷系统压力异常预警模型
@@ -1460,113 +1460,113 @@ namespace KAFKA_PARSE
             }
         }
 
-        ///// <summary>
-        ///// 制冷剂泄露预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetZljxlFault()
-        //{
-        //    try
-        //    {
-        //        EquipmentFault Warn1, Warn2;
-        //        var addFaults = new List<FaultOrWarn>();
+        /// <summary>
+        /// 制冷剂泄露预警模型
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetZljxlFault()
+        {
+            try
+            {
+                EquipmentFault Warn1, Warn2;
+                var addFaults = new List<FaultOrWarn>();
 
-        //        var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //        var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //        var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //        //获取线路名称
-        //        var XL = config.Where(x => x.concode == _lineCode).First().conval;
+                var config = _db.Queryable<SYS_CONFIG>().ToList();
+                var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
+                var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
+                //获取线路名称
+                var XL = config.Where(x => x.concode == _lineCode).First().conval;
 
-        //        var newData = await GetNewData(null);
+                var newData = await GetNewData(null);
 
-        //        if (newData.Count == 0) return;
+                if (newData.Count == 0) return;
 
-        //        foreach (var item in nowData)
-        //        {
+                foreach (var item in nowData)
+                {
 
-        //            if (item.yxtzjid == 1)
-        //            {
-        //                Warn1 = equipments.First(x => x.FaultCode == "hvac1014050001");
-        //                Warn2 = equipments.First(x => x.FaultCode == "hvac1014050002");
-        //            }
-        //            else
-        //            {
-        //                Warn1 = equipments.First(x => x.FaultCode == "hvac1014050003");
-        //                Warn2 = equipments.First(x => x.FaultCode == "hvac1014050004");
-        //            }
+                    if (item.yxtzjid == 1)
+                    {
+                        Warn1 = equipments.First(x => x.FaultCode == "hvac1014050001");
+                        Warn2 = equipments.First(x => x.FaultCode == "hvac1014050002");
+                    }
+                    else
+                    {
+                        Warn1 = equipments.First(x => x.FaultCode == "hvac1014050003");
+                        Warn2 = equipments.First(x => x.FaultCode == "hvac1014050004");
+                    }
 
-        //            var faultOrWarns = _db.Queryable<FaultOrWarn>()
-        //                            .Where(x => x.DeviceCode == item.device_code && (x.Code == Warn1.FaultCode || x.Code == Warn2.FaultCode))
-        //                            .ToList();
+                    var faultOrWarns = _db.Queryable<FaultOrWarn>()
+                                    .Where(x => x.DeviceCode == item.device_code && (x.Code == Warn1.FaultCode || x.Code == Warn2.FaultCode))
+                                    .ToList();
 
-        //            var isAny1 = faultOrWarns.FirstOrDefault(x => x.Code == Warn1.FaultCode);
-        //            var isAny2 = faultOrWarns.FirstOrDefault(x => x.Code == Warn2.FaultCode);
+                    var isAny1 = faultOrWarns.FirstOrDefault(x => x.Code == Warn1.FaultCode);
+                    var isAny2 = faultOrWarns.FirstOrDefault(x => x.Code == Warn2.FaultCode);
 
-        //            var ysj1data = newData.Where(x => x.device_code == item.device_code && x.jz1ysj1zt == 0);
-        //            var ysj2data = newData.Where(x => x.device_code == item.device_code && x.jz1ysjj2zt == 0);
+                    var ysj1data = newData.Where(x => x.device_code == item.device_code && x.jz1ysj1zt == 0);
+                    var ysj2data = newData.Where(x => x.device_code == item.device_code && x.jz1ysjj2zt == 0);
 
-        //            var isTrue1 = ysj1data.Any(x => x.jz1ysj1gyyl < 600 || x.jz1ysj1dyyl < 600);
-        //            var isTrue2 = ysj1data.Any(x => x.jz1ysj2gyyl < 600 || x.jz1ysj2dyyl < 600);
+                    var isTrue1 = ysj1data.Any(x => x.jz1ysj1gyyl < 600 || x.jz1ysj1dyyl < 600);
+                    var isTrue2 = ysj1data.Any(x => x.jz1ysj2gyyl < 600 || x.jz1ysj2dyyl < 600);
 
-        //            if (isAny1 == null && isTrue1)
-        //            {
-        //                var addFault = new FaultOrWarn
-        //                {
-        //                    xlh = XL,
-        //                    lch = item.lch,
-        //                    cxh = item.cxh,
-        //                    DeviceCode = item.device_code,
-        //                    Code = Warn1.FaultCode,
-        //                    Name = Warn1.FaultName,
-        //                    FaultType = Warn1.Type,
-        //                    Type = "2",
-        //                    State = "1",
-        //                    createtime = item.create_time
-        //                };
-        //                addFaults.Add(addFault);
-        //            }
-        //            if (isAny2 == null && isTrue2)
-        //            {
-        //                var addFault = new FaultOrWarn
-        //                {
-        //                    xlh = XL,
-        //                    lch = item.lch,
-        //                    cxh = item.cxh,
-        //                    DeviceCode = item.device_code,
-        //                    Code = Warn2.FaultCode,
-        //                    Name = Warn2.FaultName,
-        //                    FaultType = Warn2.Type,
-        //                    Type = "2",
-        //                    State = "1",
-        //                    createtime = item.create_time
-        //                };
-        //                addFaults.Add(addFault);
-        //            }
-        //        }
+                    if (isAny1 == null && isTrue1)
+                    {
+                        var addFault = new FaultOrWarn
+                        {
+                            xlh = XL,
+                            lch = item.lch,
+                            cxh = item.cxh,
+                            DeviceCode = item.device_code,
+                            Code = Warn1.FaultCode,
+                            Name = Warn1.FaultName,
+                            FaultType = Warn1.Type,
+                            Type = "2",
+                            State = "1",
+                            createtime = item.create_time
+                        };
+                        addFaults.Add(addFault);
+                    }
+                    if (isAny2 == null && isTrue2)
+                    {
+                        var addFault = new FaultOrWarn
+                        {
+                            xlh = XL,
+                            lch = item.lch,
+                            cxh = item.cxh,
+                            DeviceCode = item.device_code,
+                            Code = Warn2.FaultCode,
+                            Name = Warn2.FaultName,
+                            FaultType = Warn2.Type,
+                            Type = "2",
+                            State = "1",
+                            createtime = item.create_time
+                        };
+                        addFaults.Add(addFault);
+                    }
+                }
 
-        //        var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
+                var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
 
-        //        if (faultReq != null && faultReq.result_code == "200")
-        //        {
-        //            _logger.LogInformation($"制冷剂泄露预警推送成功，新增了{addFaults.Count}条预警");
+                if (faultReq != null && faultReq.result_code == "200")
+                {
+                    _logger.LogInformation($"制冷剂泄露预警推送成功，新增了{addFaults.Count}条预警");
 
-        //            for (int i = 0; i < addFaults.Count; i++)
-        //            {
-        //                addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //            }
-        //        }
+                    for (int i = 0; i < addFaults.Count; i++)
+                    {
+                        addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
+                    }
+                }
 
-        //        if (addFaults.Count > 0)
-        //        {
-        //            var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //            _logger.LogInformation($"制冷剂泄露预警同步完成，新增了{addnum}条预警");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"制冷剂泄露预警失败：{ex.ToString()}");
-        //    }
-        //}
+                if (addFaults.Count > 0)
+                {
+                    var addnum = _db.Insertable(addFaults).ExecuteCommand();
+                    _logger.LogInformation($"制冷剂泄露预警同步完成，新增了{addnum}条预警");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"制冷剂泄露预警失败：{ex.ToString()}");
+            }
+        }
 
         ///// <summary>
         ///// 滤网脏堵预警模型
