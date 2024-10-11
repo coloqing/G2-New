@@ -58,6 +58,54 @@ namespace DataBase.Tables
         public string device_code { get; set; }
 
         /// <summary>
+        /// Desc:机组1新风温度
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1新风温度", Length = 8)]
+        public string jz1xfwd { get; set; }
+
+        /// <summary>
+        /// Desc:机组1回送风温度1
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1回送风温度1", Length = 8)]
+        public string jz1hsfwd1 { get; set; }
+
+        /// <summary>
+        /// Desc:机组1回送风温度2
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1回送风温度2", Length = 8)]
+        public string jz1hsfwd2 { get; set; }
+
+        /// <summary>
+        /// Desc:机组2新风温度
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2新风温度", Length = 10)]
+        public string jz2xfwd { get; set; }
+
+        /// <summary>
+        /// Desc:机组2送风温度1
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2送风温度1", Length = 8)]
+        public string jz2hsfwd1 { get; set; }
+
+        /// <summary>
+        /// Desc:机组2送风温度2
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2送风温度2", Length = 8)]
+        public string jz2hsfwd2 { get; set; }
+
+        /// <summary>
         /// Desc:机组1送回风温度
         /// Default:
         /// Nullable:True
@@ -72,8 +120,6 @@ namespace DataBase.Tables
         /// </summary>           
         [SugarColumn(ColumnDescription = "机组2送回风温度", Length = 10)]
         public string jz2shfwd { get; set; }
-
-
 
         /// <summary>
         /// Desc:机组1冷凝风机1运行
