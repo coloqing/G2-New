@@ -186,7 +186,21 @@ namespace DataBase.Tables
         [SugarColumn(ColumnDescription = "机组2压缩机2运行", Length = 1)]
         public string jz2ysj2yx { get; set; }
 
+        /// <summary>
+        /// Desc:机组1紫外线灯运行
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1紫外线灯运行", Length = 1)]
+        public string jz1zwxdyx { get; set; }
 
+        /// <summary>
+        /// Desc:机组2紫外线灯运行
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2紫外线灯运行", Length = 1)]
+        public string jz2zwxdyx { get; set; }
 
 
         /// <summary>

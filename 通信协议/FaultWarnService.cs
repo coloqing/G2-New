@@ -97,7 +97,7 @@ namespace KAFKA_PARSE
                             await Task.Delay(timeToWait, cancellationToken);
 
                             // 执行你的任务  
-                            await Delete();
+                            //await Delete();
                         }
                         catch (TaskCanceledException)
                         {
@@ -145,17 +145,11 @@ namespace KAFKA_PARSE
 
                 try
                 {
-                    await GetSfwdFault();
-                    //await GetYsjFault();
-                    //await GetZfqzdFault();
-                    //await GetZljxlFault();
-                    await GetZlmbwdFault();
-                    await GetZlxtylFault();
-                    //await GetSbdlzFault();
-                    //await GetLwzdFault();
-                    //await GetLnqzdFault();
-                    //await GetKqzlFault();
-                    //await GetLnjcfdlFault();
+                    //await GetSfwdFault();
+                   
+                    //await GetZlmbwdFault();
+                    //await GetZlxtylFault();
+                    //await GetZwxdsmFault();
                 }
                 catch (Exception ex)
                 {
@@ -228,110 +222,6 @@ namespace KAFKA_PARSE
 
         }
 
-        ///// <summary>
-        ///// 更新寿命数据并推送
-        ///// </summary>
-        ///// <param name="dataList"></param>
-        ///// <returns></returns>
-        ///// <exception cref="Exception"></exception>
-        //private async Task AddOrUpdateSMData()
-        //{
-        //    var result = new List<PartsLife>();
-
-        //    try
-        //    {
-        //        var nowdate = DateTime.Now;
-        //        var startime = nowdate.AddMinutes(-5);
-        //        var dataTime = DateTime.Now.ToString("yyyyMMdd");
-
-        //        var nowLifeSql = $@"SELECT
-        //                                 s.jz1lnfj1ljgzsj, 
-        //                                 s.jz1lnfj2ljgzsj, 
-        //                                 s.jz1lnfj1zcljgzsj, 
-        //                                 s.jz1lnfj2zcljgzsj, 
-        //                                 s.jz1tfj1ljgzsj, 
-        //                                 s.jz1tfj2ljgzsj, 
-        //                                 s.jz1tfj1zcljgzsj, 
-        //                                 s.jz1tfj2zcljgzsj, 
-        //                                 s.jz1ysj1ljgzsj, 
-        //                                 s.jz1ysj2ljgzsj, 
-        //                                 s.jz1kqjhqljgzsj, 
-        //                                 s.jz1zwxdljgzsj, 
-        //                                 s.jz1kqjhqdgljgzsj, 
-        //                                 s.jz1zwxddgljgzsj, 
-        //                                 s.jz1tfjjjtfjcqdzcs, 
-        //                                 s.jz1tfjjcqdzcs, 
-        //                                 s.jz1tfj2jcqdzcs, 
-        //                                 s.jz1lnfjjcqdzcs, 
-        //                                 s.jz1ysj1jcqdzcs, 
-        //                                 s.jz1ysj2jcqdzcs, 
-        //                                 s.lch, 
-        //                                 s.cxh, 
-        //                                 s.yxtzjid, 
-        //                                 s.device_code, 
-        //                                 s.cxhName, 
-        //                                 s.create_time
-        //                                FROM
-        //                                 dbo.TB_PARSING_NEWDATAS AS s
-        //                                ";
-        //        var lifeData = await _db.SqlQueryable<TB_PARSING_NEWDATAS>(nowLifeSql).ToListAsync();
-
-        //        var partsLifeData = await _db.Queryable<PartsLife>().Where(x => x.Type == "次").ToListAsync();
-
-        //        var propertyCache = new ConcurrentDictionary<string, Func<object, object>>();
-
-        //        foreach (var life in lifeData)
-        //        {
-        //            var data = partsLifeData.Where(x => x.CX == life.cxh && x.WZ == life.yxtzjid).ToList();
-
-        //            if (data != null)
-        //            {
-        //                Type type = life.GetType();
-
-        //                foreach (var item in data)
-        //                {
-        //                    string propertyName = item.Code;
-
-        //                    // 尝试从缓存中获取属性访问器  
-        //                    if (!propertyCache.TryGetValue(propertyName, out var getValue))
-        //                    {
-        //                        // 如果缓存中不存在，则使用反射创建并添加到缓存中  
-        //                        PropertyInfo propertyInfo = type.GetProperty(propertyName);
-        //                        if (propertyInfo != null)
-        //                        {
-        //                            // 注意：这里我们假设属性可以安全地转换为 object，然后在需要时转换为具体类型  
-        //                            getValue = obj => propertyInfo.GetValue(obj, null);
-        //                            propertyCache.TryAdd(propertyName, getValue); // 尝试添加到缓存中，防止并发时的重复添加  
-        //                        }
-        //                        else
-        //                        {
-        //                            // 如果属性不存在，则可以根据需要处理（例如记录错误、跳过等）  
-        //                            continue; // 这里我们选择跳过当前 item  
-        //                        }
-        //                    }
-        //                    var runLife = Convert.ToInt32(getValue(life));
-
-        //                    item.RunLife = runLife;
-        //                    item.updatetime = life.rq;
-
-        //                    result.Add(item);
-
-        //                }
-        //            }
-        //        }
-
-        //        var updateNum = await _db.Updateable(result)
-        //                 .UpdateColumns(it => new { it.RunLife, it.updatetime })
-        //                 .WhereColumns(it => it.Id)
-        //                 .ExecuteCommandAsync();
-        //        await Console.Out.WriteLineAsync($"寿命数据更新成功,更新了{updateNum}条数据");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"更新寿命数据时出错：{ex.ToString()}");
-        //    }
-        //}
-
         /// <summary>
         /// 更新寿命数据并推送
         /// </summary>
@@ -345,9 +235,6 @@ namespace KAFKA_PARSE
 
             Random random = new();
 
-            // 生成1000到2000之间的随机数（包含1000和2000）  
-            
-
             try
             {
                 var nowLifeSql = $@"SELECT *                                         
@@ -360,7 +247,7 @@ namespace KAFKA_PARSE
                 if (lifeData.Count == 0) return;
              
                 var devList = await _db.Queryable<DEVICE>().ToListAsync();
-                var devPartsList = await _db.Queryable<DEVPARTS>().ToListAsync();
+                var devPartsList = await _db.Queryable<DEVPARTS>().Where(x =>x.state == 0).ToListAsync();
                 // 创建一个字典来快速查找部件  
                 var devPartsDict = devPartsList.ToDictionary(x => (x.sbid, x.lbjid));
 
@@ -385,6 +272,8 @@ namespace KAFKA_PARSE
                         { "jz1zffj2", devData.Count(x => x.jz1zffj2yx == "1") / 60.0 },
                         { "jz2zffj1", devData.Count(x => x.jz2zffj1yx == "1") / 60.0 },
                         { "jz2zffj2", devData.Count(x => x.jz2zffj2yx == "1") / 60.0 },
+                        { "jz1zwxd", devData.Count(x => x.jz1zwxdyx == "1") / 60.0 },
+                        { "jz2zwxd", devData.Count(x => x.jz2zwxdyx == "1") / 60.0 }
                     };
 
                     // 更新每个相关部件的寿命  
@@ -404,6 +293,8 @@ namespace KAFKA_PARSE
                             "jz1zffj2" => (d.id, 93),
                             "jz2zffj1" => (d.id, 38),
                             "jz2zffj2" => (d.id, 39),
+                            "jz1zwxd" => (d.id, 134),
+                            "jz2zwxd" => (d.id, 135),
                             _ => throw new InvalidOperationException("Unknown condition")
                         };
 
@@ -424,8 +315,8 @@ namespace KAFKA_PARSE
                 }
 
                 var updateNum = await _db.Updateable(updateLife)
-                         .UpdateColumns(it => new { it.servicelife })
                          .WhereColumns(it => it.id)
+                         .UpdateColumns(it => new { it.servicelife })
                          .ExecuteCommandAsync();
                 await Console.Out.WriteLineAsync($"寿命数据更新成功,更新了{updateNum}条数据");
 
@@ -510,10 +401,7 @@ namespace KAFKA_PARSE
             {
                 var config = _db.Queryable<SYS_CONFIG>().ToList();
                 //获取故障时间
-                var sj = config.Where(x => x.concode == "WarnSj").First()?.conval;
-
-                //获取线路名称
-                //var XL = config.Where(x => x.concode == _lineCode).First()?.conval;
+                var sj = config.Where(x => x.concode == "WarnSj").First()?.conval;           
 
                 string sql = @"SELECT
 	                                gz.jz2zlxt2dykgylgz, 
@@ -728,8 +616,6 @@ namespace KAFKA_PARSE
             };
         }
 
-
-
         static Dictionary<string, object> GetPropertiesAndValues<T>(T obj)
         {
             var dict = new Dictionary<string, object>();
@@ -858,13 +744,7 @@ namespace KAFKA_PARSE
             var addFaults = new List<FAULTWARN>();
             //var config = _db.Queryable<SYS_CONFIG>().ToList();
             var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
-            var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
-            var lchs = _db.Queryable<LCH>().ToList();
-            var cxhs = _db.Queryable<CXH>().ToList();
-
-            int a = 10;
-            int b = 20;
-            var absoluteDifference = Math.Abs(a - b);
+            var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();        
 
             var faultData = _db.Queryable<FAULTWARN>().Where(x => x.state == "0").ToList();
 
@@ -897,57 +777,27 @@ namespace KAFKA_PARSE
                 var jz1sf2T = !data.Any(x => Convert.ToDouble(x.jz1hsfwd2) >= -10 && Convert.ToDouble(x.jz1hsfwd2) <= 40);
                 var jz2sf1T = !data.Any(x => Convert.ToDouble(x.jz2hsfwd1) >= -10 && Convert.ToDouble(x.jz2hsfwd1) <= 40);
                 var jz2sf2T = !data.Any(x => Convert.ToDouble(x.jz2hsfwd2) >= -10 && Convert.ToDouble(x.jz2hsfwd2) <= 40);
-
-                var lcid = lchs.FirstOrDefault(x => x.lch == item.lch);
-                var cxid = cxhs.FirstOrDefault(x => x.lcid == lcid.id && x.cxh == item.cxh);
-
-                var addFault = new FAULTWARN
-                {
-                    line_id = Convert.ToInt32(lcid.xl_id),
-                    lch = item.lch,
-                    lcid = lcid.id,
-                    cxid = cxid.id,
-                    cxh = item.cxh,
-                    sbid = (int?)item.id,
-                    sbbm = item.device_code,                 
-                    state = "0",                  
-                    collect_time = DateTime.Now,
-                    createtime = DateTime.Now
-                };
                 
                 if (jz1sf1fault && jz1sf1T)
                 {
-                    addFault.xdid = jz1sfWarn1.id;
-                    addFault.type = jz1sfWarn1.type;
-                    addFault.xdmc = jz1sfWarn1.jxname;
-                    addFault.gzjb = jz1sfWarn1.gzdj;
+                    var addFault = GetFAULTWARN(item, jz1sfWarn1);    
                     addFaults.Add(addFault);
                 }
                 if (jz1sf2fault && jz1sf2T)
                 {
-                    addFault.xdid = jz1sfWarn2.id;
-                    addFault.type = jz1sfWarn2.type;
-                    addFault.xdmc = jz1sfWarn2.jxname;
-                    addFault.gzjb = jz1sfWarn2.gzdj;
+                    var addFault = GetFAULTWARN(item, jz1sfWarn2);
                     addFaults.Add(addFault);
                 }
                 if (jz2sf1fault && jz2sf1T)
                 {
-                    addFault.xdid = jz2sfWarn1.id;
-                    addFault.type = jz2sfWarn1.type;
-                    addFault.xdmc = jz2sfWarn1.jxname;
-                    addFault.gzjb = jz2sfWarn1.gzdj;
+                    var addFault = GetFAULTWARN(item, jz2sfWarn1);
                     addFaults.Add(addFault);
                 }
                 if (jz2sf2fault && jz2sf2T)
                 {
-                    addFault.xdid = jz2sfWarn2.id;
-                    addFault.type = jz2sfWarn2.type;
-                    addFault.xdmc = jz2sfWarn2.jxname;
-                    addFault.gzjb = jz2sfWarn2.gzdj;
+                    var addFault = GetFAULTWARN(item, jz2sfWarn2);
                     addFaults.Add(addFault);
                 }
-
             }    
 
             if (addFaults.Count > 0)
@@ -968,7 +818,6 @@ namespace KAFKA_PARSE
             }
         }
         
-
         /// <summary>
         /// 制冷系统压力异常预警模型
         /// </summary>
@@ -981,9 +830,7 @@ namespace KAFKA_PARSE
             var config = _db.Queryable<SYS_CONFIG>().ToList();
             var nowData = _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToList();
             var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
-            var faultData = _db.Queryable<FAULTWARN>().ToList();
-            var lchs = _db.Queryable<LCH>().ToList();
-            var cxhs = _db.Queryable<CXH>().ToList();
+            var faultData = _db.Queryable<FAULTWARN>().ToList();       
 
             string sql = @"SELECT * FROM
 							    dbo.TB_PARSING_DATAS_YJ_2" + $"_{DateTime.Now:yyyyMMdd} " +
@@ -1011,81 +858,37 @@ namespace KAFKA_PARSE
             foreach (var item in nowData)
             {           
                 var ysjdata = data3minute.Where(x => x.device_code == item.device_code);
-                             
-                //var pq1 = data.Any(x => x.jz1ysj1pqwd > 125 || x.jz1ysj1pqwd < 30);
-                //var pq2 = data.Any(x => x.jz1ysj2pqwd > 125 || x.jz1ysj2pqwd < 30);
-
-                //var xq1 = data.Any(x => x.jz1ysj1xqwd < -10 || x.jz1ysj1xqwd > 40);
-                //var xq2 = data.Any(x => x.jz1ysj2xqwd < -10 || x.jz1ysj2xqwd > 40);
 
                 var jz1ysj1 = ysjdata.Any(x => (Convert.ToInt32(x.jz1zlxt1gyylz) > 2900 && x.jz1zlxt1gycgqgz == "0")|| (Convert.ToInt32(x.jz1zlxt1dyylz) <= 150 && x.jz1zlxt1dycgqgz == "0"));
                 var jz1ysj2 = ysjdata.Any(x => (Convert.ToInt32(x.jz1zlxt2gyylz) > 2900 && x.jz1zlxt2gycgqgz == "0")|| (Convert.ToInt32(x.jz1zlxt2dyylz) <= 150 && x.jz1zlxt2dycgqgz == "0"));
                 var jz2ysj1 = ysjdata.Any(x => (Convert.ToInt32(x.jz2zlxt1gyylz) > 2900 && x.jz2zlxt1gycgqgz == "0")|| (Convert.ToInt32(x.jz2zlxt1dyylz) <= 150 && x.jz2zlxt1dycgqgz == "0"));
                 var jz2ysj2 = ysjdata.Any(x => (Convert.ToInt32(x.jz2zlxt2gyylz) > 2900 && x.jz2zlxt2gycgqgz == "0")|| (Convert.ToInt32(x.jz2zlxt2dyylz) <= 150 && x.jz2zlxt2dycgqgz == "0"));
                 
-                //var dy1 = ysjdata.Any(x => x.jz1ysj1dyyl < 300 || x.jz1ysj1dyyl > 800);
-                //var dy2 = ysjdata.Any(x => x.jz1ysj2dyyl < 300 || x.jz1ysj2dyyl > 800);
-
-                //var pq1F = faultData.Any(x => x.Code == pqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-                //var pq2F = faultData.Any(x => x.Code == pqWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-                //var xq1F = faultData.Any(x => x.Code == xqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-                //var xq2F = faultData.Any(x => x.Code == xqWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
                 var jz1w1F = !faultData.Any(x => x.xdid == jz1Warn1.id && x.state == "0" && x.sbbm == item.device_code);
                 var jz1w2F = !faultData.Any(x => x.xdid == jz1Warn2.id && x.state == "0" && x.sbbm == item.device_code);
 
                 var jz2w1F = !faultData.Any(x => x.xdid == jz2Warn1.id && x.state == "0" && x.sbbm == item.device_code);
                 var jz2w2F = !faultData.Any(x => x.xdid == jz2Warn2.id && x.state == "0" && x.sbbm == item.device_code);
 
-                var lcid = lchs.FirstOrDefault(x => x.lch == item.lch);
-                var cxid = cxhs.FirstOrDefault(x => x.lcid == lcid.id && x.cxh == item.cxh);
-
-                var addfault = new FAULTWARN
-                {
-                    line_id = Convert.ToInt32(lcid.xl_id),
-                    lch = item.lch,
-                    lcid = lcid.id,
-                    cxid = cxid.id,
-                    cxh = item.cxh,
-                    sbid = (int?)item.id,
-                    sbbm = item.device_code,                  
-                    state = "0",                 
-                    collect_time = DateTime.Now,
-                    createtime = DateTime.Now
-                };
-
                 if (jz1ysj1zt && jz1ysj1 && jz1w1F)
                 {
-                    addfault.xdid = jz1Warn1.id;
-                    addfault.type = jz1Warn1.type;
-                    addfault.xdmc = jz1Warn1.jxname;
-                    addfault.gzjb = jz1Warn1.gzdj;
-                    addFaults.Add(addfault);
+                    var addFault = GetFAULTWARN(item, jz1Warn1);
+                    addFaults.Add(addFault);
                 }
                 if (jz1ysj2zt && jz1ysj2 && jz1w2F)
                 {
-                    addfault.xdid = jz1Warn1.id;
-                    addfault.type = jz1Warn1.type;
-                    addfault.xdmc = jz1Warn1.jxname;
-                    addfault.gzjb = jz1Warn1.gzdj;
-                    addFaults.Add(addfault);
+                    var addFault = GetFAULTWARN(item, jz1Warn2);
+                    addFaults.Add(addFault);
                 }
                 if (jz2ysj1zt && jz2ysj1 && jz2w1F)
                 {
-                    addfault.xdid = jz1Warn1.id;
-                    addfault.type = jz1Warn1.type;
-                    addfault.xdmc = jz1Warn1.jxname;
-                    addfault.gzjb = jz1Warn1.gzdj;
-                    addFaults.Add(addfault);
+                    var addFault = GetFAULTWARN(item, jz2Warn1);
+                    addFaults.Add(addFault);
                 }
                 if (jz2ysj2zt && jz2ysj2 && jz2w2F)
                 {
-                    addfault.xdid = jz1Warn1.id;
-                    addfault.type = jz1Warn1.type;
-                    addfault.xdmc = jz1Warn1.jxname;
-                    addfault.gzjb = jz1Warn1.gzdj;
-                    addFaults.Add(addfault);
+                    var addFault = GetFAULTWARN(item, jz2Warn2);
+                    addFaults.Add(addFault);
                 }
             }
 
@@ -1107,283 +910,7 @@ namespace KAFKA_PARSE
             }
         }
 
-        ///// <summary>
-        ///// 设备运行电流异常预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetSbdlzFault()
-        //{
-        //    EquipmentFault Warn1, Warn2, LnWarn1, LnWarn2, ysjWarn1, ysjWarn2;
-        //    var addFaults = new List<FaultOrWarn>();
-
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    var faultData = _db.Queryable<FaultOrWarn>().ToList();
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
-
-        //    var newData = await GetNewData(null);
-        //    if (newData.Count == 0) return;
-
-        //    foreach (var item in nowData)
-        //    {
-        //        if (item.yxtzjid == 1)
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014090001");
-        //            Warn2 = equipments.First(x => x.FaultCode == "hvac1014090002");
-
-        //            LnWarn1 = equipments.First(x => x.FaultCode == "hvac1014100001");
-        //            LnWarn2 = equipments.First(x => x.FaultCode == "hvac1014100002");
-
-        //            ysjWarn1 = equipments.First(x => x.FaultCode == "hvac1014110001");
-        //            ysjWarn2 = equipments.First(x => x.FaultCode == "hvac1014110002");
-        //        }
-        //        else
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014090003");
-        //            Warn2 = equipments.First(x => x.FaultCode == "hvac1014090004");
-
-        //            LnWarn1 = equipments.First(x => x.FaultCode == "hvac1014100003");
-        //            LnWarn2 = equipments.First(x => x.FaultCode == "hvac1014100004");
-
-        //            ysjWarn1 = equipments.First(x => x.FaultCode == "hvac1014110003");
-        //            ysjWarn2 = equipments.First(x => x.FaultCode == "hvac1014110004");
-        //        }
-
-        //        var data = newData.Where(x => x.device_code == item.device_code);
-
-        //        var tfj1 = data.Any(x => x.jz1tfj1uxdlz < 1 || x.jz1tfj1vxdlz < 1 || x.jz1tfj1wxdlz < 1);
-        //        var tfj2 = data.Any(x => x.jz1tfj2uxdlz < 1 || x.jz1tfj2vxdlz < 1 || x.jz1tfj2wxdlz < 1);
-
-        //        var lnfj1 = data.Any(x => x.jz1lnfj1uxdlz < 1.2 || x.jz1lnfj1vxdlz < 1.2 || x.jz1lnfj1wxdlz < 1.2);
-        //        var lnfj2 = data.Any(x => x.jz1lnfj2uxdlz < 1.2 || x.jz1lnfj2vxdlz < 1.2 || x.jz1lnfj2wxdlz < 1.2);
-
-        //        var ysj1 = data.Any(x => x.jz1ysj1uxdlz < 4 || x.jz1ysj1vxdlz < 4 || x.jz1ysj1wxdlz < 4 || x.jz1ysj1uxdlz > 25 || x.jz1ysj1vxdlz > 25 || x.jz1ysj1wxdlz > 25);
-        //        var ysj2 = data.Any(x => x.jz1ysj2uxdlz < 4 || x.jz1ysj2vxdlz < 4 || x.jz1ysj2wxdlz < 4 || x.jz1ysj2uxdlz > 25 || x.jz1ysj2vxdlz > 25 || x.jz1ysj2wxdlz > 25);
-
-        //        var tfj1F = faultData.Any(x => x.Code == Warn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-        //        var tfj2F = faultData.Any(x => x.Code == Warn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-        //        var lnfj1F = faultData.Any(x => x.Code == LnWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-        //        var lnfj2F = faultData.Any(x => x.Code == LnWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-        //        var ysj1F = faultData.Any(x => x.Code == ysjWarn1.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-        //        var ysj2F = faultData.Any(x => x.Code == ysjWarn2.FaultCode && x.State == "1" && x.DeviceCode == item.device_code);
-
-        //        var addfault = new FaultOrWarn
-        //        {
-        //            xlh = XL,
-        //            lch = item.lch,
-        //            cxh = item.cxh,
-        //            DeviceCode = item.device_code,
-        //            Type = "2",
-        //            State = "1",
-        //            createtime = item.update_time
-        //        };
-
-        //        if (item.jz1tfj1zt == 1 && !tfj1F && tfj1)
-        //        {
-        //            addfault.Code = Warn1.FaultCode;
-        //            addfault.Name = Warn1.FaultName;
-        //            addfault.FaultType = Warn1.Type;                      
-        //            addFaults.Add(addfault);
-        //        }
-
-        //        if (item.jz1tfj2zt == 1 && !tfj2F && tfj2)
-        //        {
-        //            addfault.Code = Warn2.FaultCode;
-        //            addfault.Name = Warn2.FaultName;
-        //            addfault.FaultType = Warn2.Type;
-        //            addFaults.Add(addfault);
-        //        }
-
-        //        if (item.jz1lnfj1zt == 1 && !lnfj1F && lnfj1)
-        //        {
-        //            addfault.Code = LnWarn1.FaultCode;
-        //            addfault.Name = LnWarn1.FaultName;
-        //            addfault.FaultType = LnWarn1.Type;
-        //            addFaults.Add(addfault);
-        //        }
-
-        //        if (item.jz1lnfj2zt == 1 && !lnfj2F && lnfj2)
-        //        {
-        //            addfault.Code = LnWarn2.FaultCode;
-        //            addfault.Name = LnWarn2.FaultName;
-        //            addfault.FaultType = LnWarn2.Type;
-        //            addFaults.Add(addfault);
-        //        }
-
-        //        if (item.jz1ysj1zt == 1 && !ysj1F && ysj1)
-        //        {
-        //            addfault.Code = ysjWarn1.FaultCode;
-        //            addfault.Name = ysjWarn1.FaultName;
-        //            addfault.FaultType = ysjWarn1.Type;
-        //            addFaults.Add(addfault);
-        //        }
-
-        //        if (item.jz1ysjj2zt == 1 && !ysj2F && ysj2)
-        //        {
-        //            addfault.Code = ysjWarn2.FaultCode;
-        //            addfault.Name = ysjWarn2.FaultName;
-        //            addfault.FaultType = ysjWarn2.Type;
-        //            addFaults.Add(addfault);
-        //        }
-        //    }
-
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
-
-        //        if (faultReq != null && faultReq.result_code == "200")
-        //        {
-        //            _logger.LogInformation($"设备运行电流异常预警推送成功，新增了{addFaults.Count}条预警");
-
-        //            for (int i = 0; i < addFaults.Count; i++)
-        //            {
-        //                addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //            }
-        //        }
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //        _logger.LogInformation($"设备运行电流异常预警同步完成，新增了{addnum}条预警");
-        //    }
-        //}
-
         //#region 寿命预警模型
-
-        /////// <summary>
-        /////// 寿命异常预警模型
-        /////// </summary>
-        /////// <param name="data"></param>
-        /////// <param name="equipments"></param>
-        /////// <param name="XL"></param>
-        /////// <returns></returns>
-        //private (FaultOrWarn?, FaultOrWarn?) GetLifeFault(PartsLife data, List<EquipmentFault> equipments, string XL)
-        //{
-        //    EquipmentFault equipment;
-        //    FaultOrWarn? faultOrWarn = null, upWarn = null, isAny1;
-
-        //    string device_code = data.CX + "_" + data.WZ;
-
-        //    equipment = equipments.First(x => x.FaultCode == data.FaultCode);
-
-        //    var faultOrWarns = _db.Queryable<FaultOrWarn>()
-        //                        .Where(x => x.DeviceCode == device_code && x.Code == equipment.FaultCode)
-        //                        .ToList();
-
-        //    isAny1 = faultOrWarns.FirstOrDefault(x => x.Code == equipment.FaultCode);
-
-        //    //addAny1 = faults.FirstOrDefault(x => x.DeviceCode == device_code && x.Code == equipment.FaultCode);
-        //    //addAny2 = faults.FirstOrDefault(x => x.DeviceCode == device_code && x.Code == Warn2.FaultCode);
-
-        //    if (data.RunLife > data.RatedLife)
-        //    {
-        //        if (isAny1 == null)
-        //        {
-        //            //创建 faultOrWarn 对象并设置属性
-        //            faultOrWarn = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = data.CH,
-        //                cxh = data.CX,
-        //                DeviceCode = device_code,
-        //                Code = equipment.FaultCode,
-        //                Name = equipment.FaultName,
-        //                FaultType = equipment.Type,
-        //                Type = "2",
-        //                State = "1",
-        //                createtime = data.updatetime
-        //            };
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (isAny1 != null && isAny1.State == "1")
-        //        {
-        //            isAny1.State = "0";
-        //            isAny1.updatetime = data.updatetime;
-        //            upWarn = isAny1;
-        //        }
-        //    }
-
-        //    return (faultOrWarn, upWarn);
-        //}
-
-        ///// <summary>
-        ///// 车内空气质量预警模型
-        ///// </summary>
-        ///// <param name="data"></param>
-        ///// <param name="equipments"></param>
-        ///// <param name="XL"></param>
-        ///// <returns></returns>
-        //private async Task GetKqzlFault()
-        //{
-        //    EquipmentFault Warn1;
-        //    var addFaults = new List<FaultOrWarn>();
-
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
-
-        //    var newData = await GetNewData("15");
-        //    if (newData.Count == 0) return;
-
-        //    Warn1 = equipments.First(x => x.FaultCode == "hvac1014130001");
-
-        //    var groupData = nowData.GroupBy(x => x.cxh);
-
-        //    var faultOrWarns = _db.Queryable<FaultOrWarn>().Where(x => x.Code == Warn1.FaultCode && x.State == "1");
-        //    foreach (var item in groupData)
-        //    {
-        //        var isFault = faultOrWarns.Any(x => x.cxh == item.Key);
-
-        //        if (isFault) continue;
-
-        //        var dataList = newData.Where(x => x.cxh == item.Key).ToList();
-
-        //        var isTrue1 = dataList.Any(x => x.kssdz < 80);
-        //        var isTrue2 = dataList.Any(x => x.jz1co2nd <= 1500);
-        //        var isTrue3 = dataList.Any(x => (x.jz1kswd + x.jz1kswdcgq1wd + x.jz1kqzljcmkwd) / 3 >= 20 && (x.jz1kswd + x.jz1kswdcgq1wd + x.jz1kqzljcmkwd) / 3 <= 28);
-
-        //        if (isTrue1 || isTrue2 || isTrue3)
-        //        {
-        //            var addFault = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = item.First().lch,
-        //                cxh = item.Key,
-        //                DeviceCode = item.First().device_code,
-        //                Code = Warn1.FaultCode,
-        //                Name = Warn1.FaultName,
-        //                FaultType = Warn1.Type,
-        //                Type = "2",
-        //                State = "1",
-        //                createtime = item.First().create_time
-        //            };
-        //            addFaults.Add(addFault);
-        //        }
-        //    }
-
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
-
-        //        if (faultReq != null && faultReq.result_code == "200")
-        //        {
-        //            _logger.LogInformation($"车内空气质量预警推送成功，新增了{addFaults.Count}条预警");
-
-        //            for (int i = 0; i < addFaults.Count; i++)
-        //            {
-        //                addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //            }
-        //        }
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //        _logger.LogInformation($"车内空气质量预警同步完成，新增了{addnum}条预警");
-        //    }
-
-        //}
 
 
         /// <summary>
@@ -1395,11 +922,9 @@ namespace KAFKA_PARSE
             try
             {
                 var addFaults = new List<FAULTWARN>();
-                //var config = _db.Queryable<SYS_CONFIG>().ToList();
                 var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
                 var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
-                var lchs = _db.Queryable<LCH>().ToList();
-                var cxhs = _db.Queryable<CXH>().ToList();
+      
 
                 var Warn1 = equipments.First(x => x.faultcode == "1x07033");
                 var faultData = _db.Queryable<FAULTWARN>().Where(x => x.state == "0" && x.xdid == Warn1.id).ToList();
@@ -1436,25 +961,7 @@ namespace KAFKA_PARSE
                    
                     if ((jz1ysjzt && (isTrue1 || isTrue3)) || (jz2ysjzt && (isTrue2 || isTrue4)))
                     {
-                        var lcid = lchs.FirstOrDefault(x => x.lch == item.lch);
-                        var cxid = cxhs.FirstOrDefault(x => x.lcid == lcid.id && x.cxh == item.cxh);
-                        var addFault = new FAULTWARN
-                        {
-                            line_id = Convert.ToInt32(lcid.xl_id),
-                            lch = item.lch,
-                            lcid = lcid.id,
-                            cxid = cxid.id,
-                            cxh = item.cxh,
-                            sbid = (int?)item.id,
-                            sbbm = item.device_code,
-                            xdid = Warn1.id,
-                            type = Warn1.type,
-                            xdmc = Warn1.jxname,
-                            state = "0",
-                            gzjb = Warn1.gzdj,
-                            collect_time = DateTime.Now,
-                            createtime = DateTime.Now
-                        };
+                        var addFault = GetFAULTWARN(item, Warn1);
                         addFaults.Add(addFault);
                     }
                 }
@@ -1484,10 +991,10 @@ namespace KAFKA_PARSE
         }
 
         /// <summary>
-        /// 紫外灯寿命预警
+        /// 紫外灯寿命预警模型
         /// </summary>
         /// <returns></returns>
-        private async Task GetZwdsmFault()
+        private async Task GetZwxdsmFault()
         {
             try
             {
@@ -1495,119 +1002,41 @@ namespace KAFKA_PARSE
                 //var config = _db.Queryable<SYS_CONFIG>().ToList();
                 var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
                 var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
-                var lchs = _db.Queryable<LCH>().ToList();
-                var cxhs = _db.Queryable<CXH>().ToList();
 
-                var jz1Warn1 = equipments.First(x => x.id == 258);
-                var jz1Warn2 = equipments.First(x => x.id == 259);
-             
-                var faultData = _db.Queryable<FAULTWARN>().Where(x => x.state == "0").ToList();
-             
-                foreach (var item in nowData)
-                {
-                    //var jz1f1 = faultData.Any(x => x.xdid == jz1Warn1.id && x.sbid == item.id);
-                    //var jz1f2 = faultData.Any(x => x.xdid == jz1Warn2.id && x.sbid == item.id);
-                    //var jz2f1 = faultData.Any(x => x.xdid == jz2Warn1.id && x.sbid == item.id);
-                    //var jz2f2 = faultData.Any(x => x.xdid == jz2Warn2.id && x.sbid == item.id);
+                var jz1zwxdF = equipments.First(x => x.id == 1477);
+                var jz2zwxdF = equipments.First(x => x.id == 1478);
+              
+                var time = DateTime.Today;
+                var faultData = _db.Queryable<FAULTWARN>().Where(x => x.state == "0" && x.createtime > time).ToList();
 
-                    //var data = newDatas.Where(x => x.device_code == item.device_code).ToList();
-                    //var data1m = data1.Where(x => x.device_code == item.device_code).ToList();
-
-                    //var jz1ysj1dl = data.Any(x => x.jz1ysj1dl == "1");
-                    //var jz1ysj2dl = data.Any(x => x.jz1ysj1dl == "1");
-                    //var jz2ysj1dl = data.Any(x => x.jz1ysj1dl == "1");
-                    //var jz2ysj2dl = data.Any(x => x.jz1ysj1dl == "1");
-
-                    //var jz1ysj1T = data1m.Any(x => x)
-
-
-
-
-                    //addFaults.Add(addFault);
-
-                }
-
-                //var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
-
-                //if (faultReq != null && faultReq.result_code == "200")
-                //{
-                //    _logger.LogInformation($"制冷剂泄露预警推送成功，新增了{addFaults.Count}条预警");
-
-                //    for (int i = 0; i < addFaults.Count; i++)
-                //    {
-                //        addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-                //    }
-                //}
-
-                if (addFaults.Count > 0)
-                {
-                    var addnum = _db.Insertable(addFaults).ExecuteCommand();
-                    _logger.LogInformation($"制冷剂泄露预警同步完成，新增了{addnum}条预警");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"制冷剂泄露预警失败：{ex.ToString()}");
-            }
-        }
-
-
-
-        /// <summary>
-        /// 制冷剂泄露预警模型
-        /// </summary>
-        /// <returns></returns>
-        private async Task GetZljxlFault()
-        {
-            try
-            {
-                var addFaults = new List<FAULTWARN>();
-                //var config = _db.Queryable<SYS_CONFIG>().ToList();
-                var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
-                var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
-                var lchs = _db.Queryable<LCH>().ToList();
-                var cxhs = _db.Queryable<CXH>().ToList();
-
-                var jz1Warn1 = equipments.First(x => x.id == 258);
-                var jz1Warn2 = equipments.First(x => x.id == 259);
-                var jz2Warn1 = equipments.First(x => x.id == 260);
-                var jz2Warn2 = equipments.First(x => x.id == 261);
-
-                var faultData = _db.Queryable<FAULTWARN>().Where(x => x.state == "0").ToList();
-
-                string sql = @"SELECT * FROM
-							    dbo.TB_PARSING_DATAS_YJ_2" + $"_{DateTime.Now:yyyyMMdd} " +
-                         @"WHERE
-								create_time >= DATEADD(MINUTE,-61,GETDATE())";
-
-                var newDatas = await _db.SqlQueryable<TB_PARSING_DATAS_YJ_2>(sql).ToListAsync();
+                var newDatas = await _db.Queryable<DEVPARTS>().Where(x => x.lbjid == 134 || x.lbjid == 135).ToListAsync();
                 if (newDatas.Count == 0) return;
 
-                var time = DateTime.Now.AddMinutes(-1);
-                var data1 = newDatas.Where(x => x.create_time >= time).ToList();
+                var jz1zwdrateT = _db.Queryable<DEVIMGDB>().First(x => x.id == 134);
+                var jz2zwdrateT = _db.Queryable<DEVIMGDB>().First(x => x.id == 135);
 
                 foreach (var item in nowData)
                 {
-                    var jz1f1 = faultData.Any(x => x.xdid == jz1Warn1.id && x.sbid == item.id);
-                    var jz1f2 = faultData.Any(x => x.xdid == jz1Warn2.id && x.sbid == item.id);
-                    var jz2f1 = faultData.Any(x => x.xdid == jz2Warn1.id && x.sbid == item.id);
-                    var jz2f2 = faultData.Any(x => x.xdid == jz2Warn2.id && x.sbid == item.id);
+                    var jz1f1 = !faultData.Any(x => x.xdid == jz1zwxdF.id && x.sbid == item.id);
+                    var jz1f2 = !faultData.Any(x => x.xdid == jz2zwxdF.id && x.sbid == item.id);
+                 
+                    var data1 = newDatas.FirstOrDefault(x => x.sbid == item.id && x.lbjid == 134);
+                    var data2 = newDatas.FirstOrDefault(x => x.sbid == item.id && x.lbjid == 135);
+                  
+                    var life1T = data1.servicelife > (jz1zwdrateT.ratedlife * 0.9);
+                    var life2T = data2.servicelife > (jz2zwdrateT.ratedlife * 0.9);
 
-                    var data = newDatas.Where(x => x.device_code == item.device_code).ToList();
-                    var data1m = data1.Where(x => x.device_code == item.device_code).ToList();
+                    if (jz1f1 && life1T)
+                    {
+                        var addFault1 = GetFAULTWARN(item, jz1zwxdF);
+                        addFaults.Add(addFault1);
+                    }
 
-                    var jz1ysj1dl = data.Any(x => x.jz1ysj1dl == "1");
-                    var jz1ysj2dl = data.Any(x => x.jz1ysj1dl == "1");
-                    var jz2ysj1dl = data.Any(x => x.jz1ysj1dl == "1");
-                    var jz2ysj2dl = data.Any(x => x.jz1ysj1dl == "1");
-
-                    //var jz1ysj1T = data1m.Any(x => x)
-
-
-
-
-                   //addFaults.Add(addFault);
-                    
+                    if (jz1f2 && life2T)
+                    {
+                        var addFault = GetFAULTWARN(item, jz2zwxdF);
+                        addFaults.Add(addFault);
+                    }
                 }
 
                 //var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
@@ -1625,461 +1054,14 @@ namespace KAFKA_PARSE
                 if (addFaults.Count > 0)
                 {
                     var addnum = _db.Insertable(addFaults).ExecuteCommand();
-                    _logger.LogInformation($"制冷剂泄露预警同步完成，新增了{addnum}条预警");
+                    _logger.LogInformation($"紫外灯寿命预警同步完成，新增了{addnum}条预警");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"制冷剂泄露预警失败：{ex.ToString()}");
+                _logger.LogError($"紫外灯寿命预警失败：{ex.ToString()}");
             }
         }
-
-        ///// <summary>
-        ///// 滤网脏堵预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetLwzdFault()
-        //{
-        //    EquipmentFault Warn1;
-        //    var addFaults = new List<FaultOrWarn>();
-        //    var setFaults = new List<FaultOrWarn>();
-
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().Where(x => x.tfms == 0).ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    var faultDataQue = _db.Queryable<FaultOrWarn>().Where(x => x.State == "1");
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
-
-        //    var newData = await GetNewData(null);
-
-        //    if (newData.Count == 0) return;  
-
-        //    foreach (var item in nowData)
-        //    {
-        //        if (item.yxtzjid == 1)
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014080001");
-        //        }
-        //        else
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014080002");
-        //        }
-
-        //        var faultData = faultDataQue.Where(x => x.DeviceCode == item.device_code && x.Code == Warn1.FaultCode);
-
-        //        var isAny1 = faultData.Any(x => x.Type == "2");
-
-        //        var startOfDay = new DateTime(item.update_time.Year, item.update_time.Month, item.update_time.Day, 0, 0, 0);
-        //        var isAny2 = faultData.Any(x => x.Type == "4" && x.createtime > startOfDay);
-
-        //        if (isAny1 || isAny2) continue;
-
-        //        var time = item.create_time.AddMinutes(-3);
-        //        var time1 = item.create_time.AddMinutes(-1);
-        //        var dataList = newData.Where(x => x.device_code == item.device_code && x.create_time >= time);
-
-        //        var isTrue1 = !dataList.Any(x => x.jz1tfj1zt == 0);
-        //        var isTrue2 = !dataList.Any(x => x.jz1tfj2zt == 0);
-
-        //        var data1minute = dataList.Where(x => x.create_time >= time1);
-        //        var isFault1 = data1minute.Any(x => x.jz1lwylz >= 100);
-        //        var isFault2 = data1minute.Any(x => x.jz1lwylz >= 150);
-
-        //        if (isFault1)
-        //        {
-        //            var addFault = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = item.lch,
-        //                cxh = item.cxh,
-        //                DeviceCode = item.device_code,
-        //                Code = Warn1.FaultCode,
-        //                Name = Warn1.FaultName,
-        //                FaultType = Warn1.Type,
-        //                Type = "4",
-        //                State = "1",
-        //                createtime = item.create_time
-        //            };
-        //            addFaults.Add(addFault);
-
-        //            var count = faultData.Where(x => x.Type == "4").Count();
-
-        //            if (count >= 9)
-        //            {
-        //                addFault.Type = "2";
-        //                addFaults.Add(addFault);
-        //                setFaults.Add(addFault);
-        //            }
-        //        }
-
-        //        if (isFault2)
-        //        {
-        //            var addFault = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = item.lch,
-        //                cxh = item.cxh,
-        //                DeviceCode = item.device_code,
-        //                Code = Warn1.FaultCode,
-        //                Name = Warn1.FaultName,
-        //                FaultType = Warn1.Type,
-        //                Type = "5",
-        //                State = "1",
-        //                createtime = item.create_time
-        //            };
-        //            addFaults.Add(addFault);
-
-        //            var count = faultData.Where(x => x.Type == "5").Count();
-
-        //            if (count >= 29)
-        //            {
-        //                addFault.Type = "3";
-        //                addFault.Name = Warn1.FaultName[..^2] + "报警";
-        //                addFaults.Add(addFault);
-        //                setFaults.Add(addFault);
-        //            }
-        //        }                             
-        //    }
-
-        //    var faultReq = await FaultSetHttpPost(setFaults, new List<FaultOrWarn>());
-
-        //    if (faultReq != null && faultReq.result_code == "200")
-        //    {
-        //        _logger.LogInformation($"冷凝进出风短路预警推送成功，新增了{setFaults.Count}条预警");
-
-        //        for (int i = 0; i < addFaults.Count; i++)
-        //        {
-        //            addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //        }
-        //    }
-
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //        _logger.LogInformation($"冷凝进出风短路预警同步完成，新增了{addnum}条预警");
-        //    }
-        //}
-
-
-        ///// <summary>
-        ///// 蒸发器脏堵预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetZfqzdFault()
-        //{
-        //    EquipmentFault Warn1;
-        //    var addFaults = new List<FaultOrWarn>();
-        //    var setFaults = new List<FaultOrWarn>();
-
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
-
-        //    var newData = await GetNewData(null);
-
-        //    if (newData.Count == 0) return;
-
-        //    foreach (var item in nowData)
-        //    {
-        //        var isFault = item.tfms == 0 && item.jz1xff1kd == 100 && item.jz1hff1kd == 100 && item.jz1xff2kd == 100 && item.jz1hff2kd == 100 && item.jz1lwylz <= 40;
-        //        if (!isFault) continue;
-
-        //        if (item.yxtzjid == 1)
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014170001");
-        //        }
-        //        else
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014170002");
-        //        }
-
-        //        var dataList = newData.Where(x => x.device_code == item.device_code).OrderBy(x => x.create_time).ToList();
-
-        //        var startOfDay = new DateTime(item.update_time.Year, item.update_time.Month, item.update_time.Day, 0, 0, 0);
-
-        //        var faultData = _db.Queryable<FaultOrWarn>().Where(x => x.DeviceCode == item.device_code && x.Code == Warn1.FaultCode && x.State == "1");
-
-        //        var isAny1 = faultData.Any(x => x.Type == "2");
-        //        var isAny2 = faultData.Any(x => x.Type == "4" && x.createtime > startOfDay);
-
-        //        if (isAny1 || isAny2) continue;
-
-        //        var time = item.update_time.AddMinutes(-3);
-        //        var dataListTimeQ = dataList.Where(x => x.create_time >= time && x.create_time < item.update_time);
-
-        //        var time1 = item.update_time.AddMinutes(-1);
-        //        var minutes1Data = dataList.Where(x => x.create_time >= time1 && x.create_time < item.update_time).OrderBy(x => x.create_time);
-
-        //        var AP1 = minutes1Data.Average(x => (x.jz1tfj1uxdlz + x.jz1tfj1vxdlz + x.jz1tfj1wxdlz) / 3);
-        //        var AP2 = minutes1Data.Average(x => (x.jz1tfj2uxdlz + x.jz1tfj2vxdlz + x.jz1tfj2wxdlz) / 3);
-
-
-        //        var tfj1 = AP1 >= 0.9 * 1.1 && AP1 <= 1.1;
-        //        var tfj2 = AP2 >= 0.9 * 1.1 && AP2 <= 1.1;
-
-        //        var isTrue1 = !dataListTimeQ.Any(x => x.jz1tfj1zt == 0) && tfj1;
-        //        var isTrue2 = !dataListTimeQ.Any(x => x.jz1tfj2zt == 0) && tfj2;
-
-        //        if (isTrue1 || isTrue2)
-        //        {
-        //            var addFault = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = item.lch,
-        //                cxh = item.cxh,
-        //                DeviceCode = item.device_code,
-        //                Code = Warn1.FaultCode,
-        //                Name = Warn1.FaultName,
-        //                FaultType = Warn1.Type,
-        //                Type = "3",
-        //                State = "1",
-        //                createtime = item.create_time
-        //            };
-        //            addFaults.Add(addFault);
-
-        //            var count = faultData.Where(x => x.Type == "3").Count();
-
-        //            if (count >= 14)
-        //            {
-        //                addFault.Type = "2";
-        //                addFaults.Add(addFault);
-        //                setFaults.Add(addFault);
-        //            }
-        //        }            
-        //    }
-
-        //    var faultReq = await FaultSetHttpPost(setFaults, new List<FaultOrWarn>());
-
-        //    if (faultReq != null && faultReq.result_code == "200")
-        //    {
-        //        _logger.LogInformation($"冷凝进出风短路预警推送成功，新增了{setFaults.Count}条预警");
-
-        //        for (int i = 0; i < addFaults.Count; i++)
-        //        {
-        //            addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //        }
-        //    }
-
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-
-
-        //        _logger.LogInformation($"冷凝进出风短路预警同步完成，新增了{addnum}条预警");
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 冷凝器脏堵预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetLnqzdFault()
-        //{
-        //    EquipmentFault Warn1;
-        //    var addFaults = new List<FaultOrWarn>();
-        //    var setFaults = new List<FaultOrWarn>();
-
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    var faultOrWarn = _db.Queryable<FaultOrWarn>().ToList();
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
-
-        //    var newData = await GetNewData(null);
-        //    if (newData.Count == 0) return;
-
-        //    foreach (var item in nowData)
-        //    {
-
-        //        if (!new[] { 2, 3, 4, 5 }.Contains(item.tfms))
-        //        {
-        //            continue;
-        //        }
-
-        //        if (item.yxtzjid == 1)
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014180001");
-        //        }
-        //        else
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014180002");
-        //        }
-
-        //        var faultData = faultOrWarn.Where(x => x.DeviceCode == item.device_code && x.Code == Warn1.FaultCode && x.State == "1");
-
-        //        var startOfDay = new DateTime(item.update_time.Year, item.update_time.Month, item.update_time.Day, 0, 0, 0);
-
-        //        var dataList = newData.Where(x => x.device_code == item.device_code).ToList();
-        //        var isAny1 = faultData.Any(x => x.Type == "2");
-        //        var isAny2 = faultData.Any(x => x.Type == "4" && x.createtime > startOfDay);
-
-        //        if (isAny1 || isAny2) continue;
-
-        //        var time = item.update_time.AddMinutes(-3);
-        //        var dataListTimeQ = dataList.Where(x => x.create_time >= time && x.create_time < item.update_time);
-
-        //        var time1 = item.update_time.AddMinutes(-1);
-        //        var minutes1Data = dataList.Where(x => x.create_time >= time1 && x.create_time < item.update_time).OrderBy(x => x.create_time);
-
-        //        var ysj1pl = minutes1Data.Any(x => x.jz1ysj1pl != 50);
-        //        var ysj2pl = minutes1Data.Any(x => x.jz1ysj2pl != 50);
-
-        //        var P50 = 0.35565 + 0.05022 * item.jz1swwd;
-
-        //        var ysj1P = (item.jz1ysj1gyyl / 1000) > (P50 * 1.1);
-        //        var ysj2P = (item.jz1ysj2gyyl / 1000) > (P50 * 1.1);
-
-        //        var isTrue1 = !dataListTimeQ.Any(x => x.jz1ysj1zt == 0) && ysj1P;
-        //        var isTrue2 = !dataListTimeQ.Any(x => x.jz1ysjj2zt == 0) && ysj2P;
-
-        //        if (isTrue1 || isTrue2)
-        //        {
-        //            var addFault = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = item.lch,
-        //                cxh = item.cxh,
-        //                DeviceCode = item.device_code,
-        //                Code = Warn1.FaultCode,
-        //                Name = Warn1.FaultName,
-        //                FaultType = Warn1.Type,
-        //                Type = "4",
-        //                State = "1",
-        //                createtime = item.update_time
-        //            };
-        //            addFaults.Add(addFault);
-
-        //            var count = faultData.Where(x => x.Type == "4").Count();
-
-        //            if (count >= 9)
-        //            {
-        //                addFault.Type = "2";
-        //                addFaults.Add(addFault);
-        //                setFaults.Add(addFault);
-        //            }
-
-        //            if (count >= 14)
-        //            {
-        //                addFault.Type = "3";
-        //                addFault.Name = Warn1.FaultName[..^2] + "报警";
-        //                addFaults.Add(addFault);
-        //                setFaults.Add(addFault);
-        //            }
-        //        }   
-        //    }
-
-        //    var faultReq = await FaultSetHttpPost(setFaults, new List<FaultOrWarn>());
-
-        //    if (faultReq != null && faultReq.result_code == "200")
-        //    {
-        //        _logger.LogInformation($"冷凝进出风短路预警推送成功，新增了{setFaults.Count}条预警");
-
-        //        for (int i = 0; i < addFaults.Count; i++)
-        //        {
-        //            addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //        }
-        //    }
-
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-
-
-        //        _logger.LogInformation($"冷凝进出风短路预警同步完成，新增了{addnum}条预警");
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 冷凝进出风短路预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetLnjcfdlFault()
-        //{
-        //    EquipmentFault Warn1;
-        //    var addFaults = new List<FaultOrWarn>();
-
-        //    var config = _db.Queryable<SYS_CONFIG>().ToList();
-        //    var nowData = _db.Queryable<TB_PARSING_NEWDATAS>().ToList();
-        //    var equipments = await _db.Queryable<EquipmentFault>().ToListAsync();
-        //    //获取线路名称
-        //    var XL = config.Where(x => x.concode == _lineCode).First().conval;
-
-        //    var newData = await GetNewData(null);
-        //    if (newData.Count == 0) return;
-
-        //    foreach (var item in nowData)
-        //    {
-
-        //        if (!new[] { 2, 3, 4, 5 }.Contains(item.tfms)) continue;
-
-        //        if (item.yxtzjid == 1)
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014190001");
-        //        }
-        //        else
-        //        {
-        //            Warn1 = equipments.First(x => x.FaultCode == "hvac1014190002");
-        //        }
-
-        //        var dataList = newData.Where(x => x.device_code == item.device_code).ToList();
-        //        var isAny1 = _db.Queryable<FaultOrWarn>().First(x => x.DeviceCode == item.device_code && x.Code == Warn1.FaultCode && x.State == "1");
-
-        //        var time = item.update_time.AddMinutes(-3);
-        //        var dataListTimeQ = dataList.Where(x => x.create_time >= time && x.create_time < item.update_time);
-
-        //        var time1 = item.update_time.AddMinutes(-1);
-        //        var minutes1Data = dataList.Where(x => x.create_time >= time1 && x.create_time < item.update_time).OrderBy(x => x.create_time);
-
-        //        var ysj1pl = minutes1Data.Any(x => x.jz1ysj1pl != minutes1Data.First().jz1ysj1pl);
-        //        var ysj2pl = minutes1Data.Any(x => x.jz1ysj2pl != minutes1Data.First().jz1ysj2pl);
-
-        //        var ylc = minutes1Data.Last().jz1ysj1gyyl - minutes1Data.First().jz1ysj1gyyl;
-        //        var ylc2 = minutes1Data.Last().jz1ysj2gyyl - minutes1Data.First().jz1ysj2gyyl;
-
-        //        var isTrue1 = !dataListTimeQ.Any(x => x.jz1ysj1zt == 0) && !ysj1pl && ylc > 200;
-        //        var isTrue2 = !dataListTimeQ.Any(x => x.jz1ysjj2zt == 0) && !ysj2pl && ylc2 > 200;
-
-        //        if (isTrue1 || isTrue2)
-        //        {
-        //            var addFault = new FaultOrWarn
-        //            {
-        //                xlh = XL,
-        //                lch = item.lch,
-        //                cxh = item.cxh,
-        //                DeviceCode = item.device_code,
-        //                Code = Warn1.FaultCode,
-        //                Name = Warn1.FaultName,
-        //                FaultType = Warn1.Type,
-        //                Type = "2",
-        //                State = "1",
-        //                createtime = item.update_time
-        //            };
-        //            addFaults.Add(addFault);
-        //        }           
-        //    }
-
-        //    var faultReq = await FaultSetHttpPost(addFaults, new List<FaultOrWarn>());
-
-        //    if (faultReq != null && faultReq.result_code == "200")
-        //    {
-        //        _logger.LogInformation($"冷凝进出风短路预警推送成功，新增了{addFaults.Count}条预警");
-
-        //        for (int i = 0; i < addFaults.Count; i++)
-        //        {
-        //            addFaults[i].SendRepId = faultReq.result_data.new_faults[i];
-        //        }
-        //    }
-
-        //    if (addFaults.Count > 0)
-        //    {
-        //        var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //        _logger.LogInformation($"冷凝进出风短路预警同步完成，新增了{addnum}条预警");
-        //    }
-        //}
 
         //#endregion
 
@@ -2103,6 +1085,38 @@ namespace KAFKA_PARSE
             var faults = await _db.SqlQueryable<WarnDTO>(faults_sql).ToListAsync();
 
             return faults;
+        }
+
+        /// <summary>
+        /// 预警初始化
+        /// </summary>
+        /// <param name="dev"></param>
+        /// <param name="fault"></param>
+        /// <returns></returns>
+        private  FAULTWARN GetFAULTWARN (TB_PARSING_DATAS_NEWCS dev, OVERHAULIDEA fault)
+        {
+            var lch = _db.Queryable<LCH>().First(x => x.lch == dev.lch);
+            var cxh = _db.Queryable<CXH>().First(x => x.lcid == lch.id && x.cxh == dev.cxh);
+          
+            var addFault = new FAULTWARN
+            {
+                line_id = Convert.ToInt32(lch.xl_id),
+                lch = dev.lch,
+                lcid = lch.id,
+                cxid = cxh.id,
+                cxh = dev.cxh,
+                sbid = (int?)dev.id,
+                sbbm = dev.device_code,
+                state = "0",
+                collect_time = DateTime.Now,
+                createtime = DateTime.Now,
+                xdid = fault.id,
+                type = fault.type,
+                xdmc = fault.jxname,
+                gzjb = fault.gzdj,
+            };
+
+            return addFault;
         }
 
         #endregion
