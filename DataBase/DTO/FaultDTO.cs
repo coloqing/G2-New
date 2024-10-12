@@ -798,6 +798,268 @@ namespace DataBase.DTO
         /// </summary>           
         [SugarColumn(ColumnDescription = "空调紧急逆变器故障", Length = 1)]
         public string ktjjnbqgz { get; set; }
+
+        /// <summary>
+        /// Desc:机组2制冷系统2泄漏预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2制冷系统2泄漏预警", Length = 1)]
+        public string jz2zlxt2xlyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2制冷系统1泄漏预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2制冷系统1泄漏预警", Length = 1)]
+        public string jz2zlxt1xlyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1制冷系统2泄漏预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1制冷系统2泄漏预警", Length = 1)]
+        public string jz1zlxt2xlyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1制冷系统1泄漏预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1制冷系统1泄漏预警", Length = 1)]
+        public string jz1zlxt1xlyj { get; set; }
+
+
+        /// <summary>
+        /// Desc:机组2滤网脏堵预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2滤网脏堵预警", Length = 1)]
+        public string jz2lwzdyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1滤网脏堵预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1滤网脏堵预警", Length = 1)]
+        public string jz1lwzdyj { get; set; }
+
+
+
+        /// <summary>
+        /// Desc:机组2冷凝风机2故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2冷凝风机2故障预警", Length = 1)]
+        public string jz2lnfj2gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2冷凝风机1故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2冷凝风机1故障预警", Length = 1)]
+        public string jz2lnfj1gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1冷凝风机2故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1冷凝风机2故障预警", Length = 1)]
+        public string jz1lnfj2gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1冷凝风机1故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1冷凝风机1故障预警", Length = 1)]
+        public string jz1lnfj1gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2蒸发风机2故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2蒸发风机2故障预警", Length = 1)]
+        public string jz2zffj2gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2蒸发风机1故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2蒸发风机1故障预警", Length = 1)]
+        public string jz2zffj1gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1蒸发风机2故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1蒸发风机2故障预警", Length = 1)]
+        public string jz1zffj2gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1蒸发风机1故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1蒸发风机1故障预警", Length = 1)]
+        public string jz1zffj1gzyj { get; set; }
+
+
+
+        /// <summary>
+        /// Desc:机组2压缩机2寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2压缩机2寿命预警", Length = 1)]
+        public string jz2ysj2smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2压缩机1寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2压缩机1寿命预警", Length = 1)]
+        public string jz2ysj1smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1压缩机2寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1压缩机2寿命预警", Length = 1)]
+        public string jz1ysj2smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1压缩机1寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1压缩机1寿命预警", Length = 1)]
+        public string jz1ysj1smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2压缩机2故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2压缩机2故障预警", Length = 1)]
+        public string jz2ysj2gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2压缩机1故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2压缩机1故障预警", Length = 1)]
+        public string jz2ysj1gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1压缩机2故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1压缩机2故障预警", Length = 1)]
+        public string jz1ysj2gzyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1压缩机1故障预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1压缩机1故障预警", Length = 1)]
+        public string jz1ysj1gzyj { get; set; }
+
+
+
+        /// <summary>
+        /// Desc:机组1冷凝风机1寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1冷凝风机1寿命预警", Length = 1)]
+        public string jz1lnfj1smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1冷凝风机2寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1冷凝风机2寿命预警", Length = 1)]
+        public string jz1lnfj2smyj { get; set; }
+
+
+
+        /// <summary>
+        /// Desc:机组2冷凝风机1寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2冷凝风机1寿命预警", Length = 1)]
+        public string jz2lnfj1smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2冷凝风机2寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2冷凝风机2寿命预警", Length = 1)]
+        public string jz2lnfj2smyj { get; set; }
+
+
+
+        /// <summary>
+        /// Desc:机组1蒸发风机1寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1蒸发风机1寿命预警", Length = 1)]
+        public string jz1zffj1smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组1蒸发风机2寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1蒸发风机2寿命预警", Length = 1)]
+        public string jz1zffj2smyj { get; set; }
+
+
+        /// <summary>
+        /// Desc:机组2蒸发风机1寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2蒸发风机1寿命预警", Length = 1)]
+        public string jz2zffj1smyj { get; set; }
+
+        /// <summary>
+        /// Desc:机组2蒸发风机2寿命预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2蒸发风机2寿命预警", Length = 1)]
+        public string jz2zffj2smyj { get; set; }
+
+
+        /// <summary>
+        /// Desc:车内空气质量预警
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "车内空气质量预警", Length = 1)]
+        public string cnkqzlyj { get; set; }
+
         public string rq { get; set; }
         public DateTime rqDateTime { get; set; }
     }
