@@ -97,7 +97,7 @@ namespace KAFKA_PARSE
                             await Task.Delay(timeToWait, cancellationToken);
 
                             // 执行你的任务  
-                            //await Delete();
+                            await Delete();
                         }
                         catch (TaskCanceledException)
                         {
@@ -127,7 +127,7 @@ namespace KAFKA_PARSE
             _faultTimer = new Timer(async _ =>
             {
                 _logger.LogInformation("开始同步故障");
-                //await FaultDataPush();
+                await FaultDataPush();
 
             }, null, TimeSpan.Zero, TimeSpan.FromMinutes(Convert.ToDouble(_FaultDataPush)));
 
@@ -145,11 +145,11 @@ namespace KAFKA_PARSE
 
                 try
                 {
-                    //await GetSfwdFault();
-                   
-                    //await GetZlmbwdFault();
-                    //await GetZlxtylFault();
-                    //await GetZwxdsmFault();
+                    await GetSfwdFault();
+
+                    await GetZlmbwdFault();
+                    await GetZlxtylFault();
+                    await GetZwxdsmFault();
                 }
                 catch (Exception ex)
                 {
@@ -536,7 +536,7 @@ namespace KAFKA_PARSE
 									gz.create_time >= DATEADD(MINUTE,-{sj},GETDATE())";
 
                 //获取故障编码
-                var equipments = await _db.Queryable<OVERHAULIDEA>().Where(x => !string.IsNullOrEmpty(x.gzval) && x.type == "3").ToListAsync();
+                var equipments = await _db.Queryable<OVERHAULIDEA>().Where(x => !string.IsNullOrEmpty(x.gzval)).ToListAsync();
                 var faultData = _db.Queryable<FAULTWARN>().ToList();
                 var devicData = _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToList();
 
@@ -772,6 +772,7 @@ namespace KAFKA_PARSE
                 var jz2sf2fault = !faultData.Any(x => x.xdid == 274 && x.sbid == item.id);
 
                 var data = data1mut.Where(x => x.device_code == item.device_code).ToList();
+                if (data.Count == 0) continue;
 
                 var jz1sf1T = !data.Any(x => Convert.ToDouble(x.jz1hsfwd1) >= -10 && Convert.ToDouble(x.jz1hsfwd1) <= 40);
                 var jz1sf2T = !data.Any(x => Convert.ToDouble(x.jz1hsfwd2) >= -10 && Convert.ToDouble(x.jz1hsfwd2) <= 40);
@@ -859,6 +860,8 @@ namespace KAFKA_PARSE
             {           
                 var ysjdata = data3minute.Where(x => x.device_code == item.device_code);
 
+                if (!ysjdata.Any()) continue;
+              
                 var jz1ysj1 = ysjdata.Any(x => (Convert.ToInt32(x.jz1zlxt1gyylz) > 2900 && x.jz1zlxt1gycgqgz == "0")|| (Convert.ToInt32(x.jz1zlxt1dyylz) <= 150 && x.jz1zlxt1dycgqgz == "0"));
                 var jz1ysj2 = ysjdata.Any(x => (Convert.ToInt32(x.jz1zlxt2gyylz) > 2900 && x.jz1zlxt2gycgqgz == "0")|| (Convert.ToInt32(x.jz1zlxt2dyylz) <= 150 && x.jz1zlxt2dycgqgz == "0"));
                 var jz2ysj1 = ysjdata.Any(x => (Convert.ToInt32(x.jz2zlxt1gyylz) > 2900 && x.jz2zlxt1gycgqgz == "0")|| (Convert.ToInt32(x.jz2zlxt1dyylz) <= 150 && x.jz2zlxt1dycgqgz == "0"));
