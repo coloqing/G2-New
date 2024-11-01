@@ -4,7 +4,7 @@
     "LineCode": "GZML7S",
     "AppId": "gzml7_gzdh_kt",
     "AppKey": "20230522fd1b4d05f3a14dec",
-    "BaseUrl": "http://192.168.31.211:9023/phm-data-service/",
+    "BaseUrl": "http://10.12.18.192:18080/gate/METRO-PHM/api/faultRecordsSubsystem/saveRecord",
 
     "GetHttpHandleTime": 3,
     "FaultDataPushTime": 2,

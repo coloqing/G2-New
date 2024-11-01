@@ -524,5 +524,21 @@ namespace DataBase.Tables
         /// </summary>           
         [SugarColumn(ColumnDescription = "机组1蒸发风机1运行", Length = 1)]
         public string jz1zffj1yx { get; set; }
+
+        /// <summary>
+        /// Desc:机组1工作模式 机组1运行模式0x00:停机模式；0x01:除菌模式；0x02:减载模式；0x03:预冷模式；0x04:紧急通风模式；0x05:除湿模式；0x06:制冷模式；0x07:火灾模式；0x08:通风模式；0xFF:无效。
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1工作模式 机组1运行模式0x00:停机模式；0x01:除菌模式；0x02:减载模式；0x03:预冷模式；0x04:紧急通风模式；0x05:除湿模式；0x06:制冷模式；0x07:火灾模式；0x08:通风模式；0xFF:无效。", Length = 4)]
+        public string jz1gzms { get; set; }
+
+        /// <summary>
+        /// Desc:机组2工作模式 机组2运行模式0x00:停机模式；0x01:除菌模式；0x02:减载模式；0x03:预冷模式；0x04:紧急通风模式；0x05:除湿模式；0x06:制冷模式；0x07:火灾模式；0x08:通风模式；0xFF:无效。
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2工作模式 机组2运行模式0x00:停机模式；0x01:除菌模式；0x02:减载模式；0x03:预冷模式；0x04:紧急通风模式；0x05:除湿模式；0x06:制冷模式；0x07:火灾模式；0x08:通风模式；0xFF:无效。", Length = 4)]
+        public string jz2gzms { get; set; }
     }
 }

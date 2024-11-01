@@ -13,4 +13,10 @@ namespace DataBase.DTO
         public string result_msg { get; set; }
 
     }
+
+    public class HttpWarnReq
+    {
+        public int code { get; set; }
+        public string message { get; set; }
+    }
 }

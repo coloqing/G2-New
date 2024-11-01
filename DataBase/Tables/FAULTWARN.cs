@@ -271,7 +271,7 @@ namespace DataBase.Tables
            public DateTime? collect_time {get;set;}
 
            /// <summary>
-           /// Desc:是否新增同步（地面接口）
+           /// Desc:是否新增同步（地面接口）改：同步id
            /// Default:0
            /// Nullable:False
            /// </summary>           

@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Reflection.PortableExecutable;
 namespace KP.Util
 {
     public class HttpClientExample
@@ -17,7 +18,7 @@ namespace KP.Util
         }
 
         // 发送GET请求并处理返回值的方法
-        public static async Task<T?> SendGetRequestAsync<T>(string url)
+        public static async Task<T> SendGetRequestAsync<T>(string url)
         {
             using (var client = new HttpClient())
             {
@@ -48,12 +49,20 @@ namespace KP.Util
         /// <param name="url"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static async Task<T?> SendPostRequestAsync<T>(string url, object content)
+        public static async Task<T> SendPostRequestAsync<T>(string url, object content, Dictionary<string,string> headers = null)
         {
             using (var client = new HttpClient())
             {
                 try
                 {
+                    // 如果提供了请求头，则添加到HttpClient的请求头中  
+                    if (headers != null)
+                    {
+                        foreach (var header in headers)
+                        {
+                            client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                        }
+                    }
 
                     string jsonContent = JsonConvert.SerializeObject(content);
                     StringContent stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
