@@ -850,70 +850,7 @@ namespace DataBase.DTO
 
 
 
-        /// <summary>
-        /// Desc:机组2冷凝风机2故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组2冷凝风机2故障预警", Length = 1)]
-        public string jz2lnfj2gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组2冷凝风机1故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组2冷凝风机1故障预警", Length = 1)]
-        public string jz2lnfj1gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组1冷凝风机2故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组1冷凝风机2故障预警", Length = 1)]
-        public string jz1lnfj2gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组1冷凝风机1故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组1冷凝风机1故障预警", Length = 1)]
-        public string jz1lnfj1gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组2蒸发风机2故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组2蒸发风机2故障预警", Length = 1)]
-        public string jz2zffj2gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组2蒸发风机1故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组2蒸发风机1故障预警", Length = 1)]
-        public string jz2zffj1gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组1蒸发风机2故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组1蒸发风机2故障预警", Length = 1)]
-        public string jz1zffj2gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组1蒸发风机1故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组1蒸发风机1故障预警", Length = 1)]
-        public string jz1zffj1gzyj { get; set; }
-
+       
 
 
         /// <summary>
@@ -946,41 +883,7 @@ namespace DataBase.DTO
         /// Nullable:True
         /// </summary>           
         [SugarColumn(ColumnDescription = "机组1压缩机1寿命预警", Length = 1)]
-        public string jz1ysj1smyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组2压缩机2故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组2压缩机2故障预警", Length = 1)]
-        public string jz2ysj2gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组2压缩机1故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组2压缩机1故障预警", Length = 1)]
-        public string jz2ysj1gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组1压缩机2故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组1压缩机2故障预警", Length = 1)]
-        public string jz1ysj2gzyj { get; set; }
-
-        /// <summary>
-        /// Desc:机组1压缩机1故障预警
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        [SugarColumn(ColumnDescription = "机组1压缩机1故障预警", Length = 1)]
-        public string jz1ysj1gzyj { get; set; }
-
-
+        public string jz1ysj1smyj { get; set; }  
 
         /// <summary>
         /// Desc:机组1冷凝风机1寿命预警

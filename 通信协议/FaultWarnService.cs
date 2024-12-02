@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog.LayoutRenderers;
 using SqlSugar;
 using System;
@@ -544,22 +545,12 @@ namespace KAFKA_PARSE
 	                                gz.jz1zlxt1xlyj, 
 	                                gz.jz2lwzdyj, 
 	                                gz.jz1lwzdyj, 
-	                                gz.jz2lnfj2gzyj, 
-	                                gz.jz2lnfj1gzyj, 
-	                                gz.jz1lnfj2gzyj, 
-	                                gz.jz1lnfj1gzyj, 
-	                                gz.jz2zffj2gzyj, 
-	                                gz.jz2zffj1gzyj, 
-	                                gz.jz1zffj2gzyj, 
-	                                gz.jz1zffj1gzyj, 
+	                               
 	                                gz.jz2ysj2smyj, 
 	                                gz.jz2ysj1smyj, 
 	                                gz.jz1ysj2smyj, 
 	                                gz.jz1ysj1smyj, 
-	                                gz.jz2ysj2gzyj, 
-	                                gz.jz2ysj1gzyj, 
-	                                gz.jz1ysj2gzyj, 
-	                                gz.jz1ysj1gzyj, 
+	                              
 	                                gz.jz1lnfj1smyj, 
 	                                gz.jz1lnfj2smyj, 
 	                                gz.jz2lnfj1smyj, 
@@ -1128,7 +1119,9 @@ namespace KAFKA_PARSE
             {
                 var addFaults = new List<FAULTWARN>();
                 var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
-               
+                bool jz1ys1avg = false, jz1ys2avg = false, jz2ys1avg = false, jz2ys2avg = false;
+
+
                 var time = DateTime.Now;
                 var today = DateTime.Today;
 
@@ -1144,7 +1137,65 @@ namespace KAFKA_PARSE
                 {
                     var data = newDatas.Where(x => x.device_code == item.device_code).OrderBy(x => x.rqDateTime).ToList();
                     if (data.Count == 0) continue;
-                   
+
+                    var ysjAvg = data.Where(x => x.jz1gzms == "6" && x.jz1ysj1pl == x.jz1ysj2pl && x.jz1ysj2pl == x.jz2ysj1pl && x.jz2ysj1pl == x.jz2ysj2pl);
+
+                    foreach (var avg in ysjAvg)
+                    {
+                        if (jz1ys1avg == false)
+                        {
+                            var jz1ysj1dl = CalculateAverage(avg.jz1ysj1dl, avg.jz1ysj2dl, avg.jz2ysj1dl, avg.jz2ysj2dl);
+                            var jz1ysj1gy = CalculateAverage(avg.jz1zlxt1gyylz, avg.jz1zlxt2gyylz, avg.jz2zlxt1gyylz, avg.jz2zlxt2gyylz);
+                            var jz1ysj1dy = CalculateAverage(avg.jz1zlxt1dyylz, avg.jz1zlxt2dyylz, avg.jz2zlxt1dyylz, avg.jz2zlxt2dyylz);
+
+                            if ((jz1ysj1dl && jz1ysj1gy) || (jz1ysj1dl && jz1ysj1dy) || (jz1ysj1gy && jz1ysj1dy))
+                            {
+                                jz1ys1avg = true;
+                            }
+                        }
+
+                        if (jz1ys2avg == false)
+                        {
+                            var jz1ysj1dl = CalculateAverage(avg.jz1ysj2dl, avg.jz1ysj1dl, avg.jz2ysj1dl, avg.jz2ysj2dl);
+                            var jz1ysj1gy = CalculateAverage(avg.jz1zlxt2gyylz, avg.jz1zlxt1gyylz, avg.jz2zlxt1gyylz, avg.jz2zlxt2gyylz);
+                            var jz1ysj1dy = CalculateAverage(avg.jz1zlxt2dyylz, avg.jz1zlxt1dyylz, avg.jz2zlxt1dyylz, avg.jz2zlxt2dyylz);
+
+                            if ((jz1ysj1dl && jz1ysj1gy) || (jz1ysj1dl && jz1ysj1dy) || (jz1ysj1gy && jz1ysj1dy))
+                            {
+                                jz1ys2avg = true;
+                            }
+                        }
+
+                        if (jz2ys1avg == false)
+                        {
+                            var jz1ysj1dl = CalculateAverage(avg.jz2ysj1dl, avg.jz1ysj1dl, avg.jz1ysj2dl, avg.jz2ysj2dl);
+                            var jz1ysj1gy = CalculateAverage(avg.jz2zlxt1gyylz, avg.jz1zlxt1gyylz, avg.jz1zlxt2gyylz, avg.jz2zlxt2gyylz);
+                            var jz1ysj1dy = CalculateAverage(avg.jz2zlxt1dyylz, avg.jz1zlxt1dyylz, avg.jz1zlxt2dyylz, avg.jz2zlxt2dyylz);
+
+                            if ((jz1ysj1dl && jz1ysj1gy) || (jz1ysj1dl && jz1ysj1dy) || (jz1ysj1gy && jz1ysj1dy))
+                            {
+                                jz2ys1avg = true;
+                            }
+                        }
+
+                        if (jz2ys2avg == false)
+                        {
+                            var jz1ysj1dl = CalculateAverage(avg.jz2ysj2dl, avg.jz1ysj1dl, avg.jz1ysj2dl, avg.jz2ysj1dl);
+                            var jz1ysj1gy = CalculateAverage(avg.jz2zlxt2gyylz, avg.jz1zlxt1gyylz, avg.jz1zlxt2gyylz, avg.jz2zlxt1gyylz);
+                            var jz1ysj1dy = CalculateAverage(avg.jz2zlxt2dyylz, avg.jz1zlxt1dyylz, avg.jz1zlxt2dyylz, avg.jz2zlxt1dyylz);
+
+                            if ((jz1ysj1dl && jz1ysj1gy) || (jz1ysj1dl && jz1ysj1dy) || (jz1ysj1gy && jz1ysj1dy))
+                            {
+                                jz2ys2avg = true;
+                            }
+                        }
+
+                        if (jz1ys1avg && jz1ys2avg && jz2ys1avg && jz2ys2avg)
+                        {
+                            break;
+                        }
+                    }
+                    
                     var jz1zffj1 = HasConsecutiveFaults(data, Jz1zffj1yx, Jz1zffj1dl, 60, ZFFJ_I);
                     var jz1zffj2 = HasConsecutiveFaults(data, Jz1zffj2yx, Jz1zffj2dl, 60, ZFFJ_I);
                     var jz2zffj1 = HasConsecutiveFaults(data, Jz2zffj1yx, Jz2zffj1dl, 60, ZFFJ_I);
@@ -1202,22 +1253,22 @@ namespace KAFKA_PARSE
                         if (addFault != null) addFaults.Add(addFault);
                     }
 
-                    if (jz1ysj1)
+                    if (jz1ysj1 || jz1ys1avg)
                     {
                         var addFault = await GetFAULTWARN("HVAC10L0110", item, today);
                         if (addFault != null) addFaults.Add(addFault);
                     }
-                    if (jz1ysj2)
+                    if (jz1ysj2 || jz1ys2avg)
                     {
                         var addFault = await GetFAULTWARN("HVAC10L0120", item, today);
                         if (addFault != null) addFaults.Add(addFault);
                     }
-                    if (jz2ysj1)
+                    if (jz2ysj1 || jz2ys1avg)
                     {
                         var addFault = await GetFAULTWARN("HVAC10L0210", item, today);
                         if (addFault != null) addFaults.Add(addFault);
                     }
-                    if (jz2ysj2)
+                    if (jz2ysj2 || jz2ys2avg)
                     {
                         var addFault = await GetFAULTWARN("HVAC10L0220", item, today);
                         if (addFault != null) addFaults.Add(addFault);
@@ -1239,6 +1290,22 @@ namespace KAFKA_PARSE
             {
                 _logger.LogError($"制冷目标温度异常预警失败：{ex.ToString()}");
             }
+        }
+      
+        /// <summary>
+        /// 压缩机指标是否超过平均值
+        /// </summary>
+        /// <param name="value1"></param>
+        /// <param name="value2"></param>
+        /// <param name="value3"></param>
+        /// <param name="value4"></param>
+        /// <returns></returns>
+        private static bool CalculateAverage(string value, string value1, string value2, string value3)
+        {
+            var avg = (Convert.ToDouble(value1) + Convert.ToDouble(value2) + Convert.ToDouble(value3)) / 3;
+            var max = avg + avg * 0.1;
+            var min = avg - avg * 0.1;
+            return Convert.ToDouble(value) > max || Convert.ToDouble(value) < min;
         }
 
         /// <summary>

@@ -302,7 +302,36 @@ namespace DataBase.Tables
         public string jz2ysj2dl { get; set; }
 
 
+        /// <summary>
+        /// Desc:机组1压缩机1频率
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1压缩机1频率", Length = 4)]
+        public string jz1ysj1pl { get; set; }
 
+        /// <summary>
+        /// Desc:机组1压缩机2频率
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组1压缩机2频率", Length = 4)]
+        public string jz1ysj2pl { get; set; }
+        /// <summary>
+        /// Desc:机组2压缩机1频率
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2压缩机1频率", Length = 4)]
+        public string jz2ysj1pl { get; set; }
+
+        /// <summary>
+        /// Desc:机组2压缩机2频率
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        [SugarColumn(ColumnDescription = "机组2压缩机2频率", Length = 4)]
+        public string jz2ysj2pl { get; set; }
 
 
         /// <summary>
