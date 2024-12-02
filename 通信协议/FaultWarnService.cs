@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NLog.LayoutRenderers;
 using SqlSugar;
+using System;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Net;
@@ -775,8 +776,7 @@ namespace KAFKA_PARSE
                 _logger.LogError($"预警推送失败，{ex.ToString()}");
                 return null;
                 
-            }
-           
+            }          
         }
 
         // 将DateTime转换为Unix时间戳（毫秒）  
@@ -836,14 +836,13 @@ namespace KAFKA_PARSE
                 var time = DateTime.Now.AddMinutes(-1);
                 var data1mut = newDatas.Where(x => x.create_time >= time).ToList();
 
-
                 foreach (var item in lch)
                 {
                     var lcData = newDatas.Where(x => x.lch == item.lch).ToList();
                     if (lcData.Count == 0) continue;
 
-                    var hfavg = lcData.Average(x => (Convert.ToDecimal(x.jz1shfwd) + Convert.ToDecimal(x.jz1shfwd))/2);
-                    var xfavg = lcData.Average(x => (Convert.ToDecimal(x.jz1xfwd) + Convert.ToDecimal(x.jz1xfwd))/2);
+                    var hfavg = lcData.Average(x => (Convert.ToDecimal(x.jz1shfwd) + Convert.ToDecimal(x.jz2shfwd))/2);
+                    var xfavg = lcData.Average(x => (Convert.ToDecimal(x.jz1xfwd) + Convert.ToDecimal(x.jz2xfwd))/2);
                     foreach (var n in nowData)
                     {
                         var jz1xffault = !faultData.Any(x => x.xdid == jz1xf.id && x.sbid == item.id);
@@ -894,7 +893,6 @@ namespace KAFKA_PARSE
                             addFaults.Add(addFault);
                         }
                     }
-
                 }
 
                 foreach (var item in nowData)
@@ -1118,76 +1116,231 @@ namespace KAFKA_PARSE
                 _logger.LogError($"制冷目标温度异常预警失败：{ex.ToString()}");
             }
         }
+        #region 设备电流异常预警模型
 
-        ///// <summary>
-        ///// 设备电流异常预警模型
-        ///// </summary>
-        ///// <returns></returns>
-        //private async Task GetSbdlFault()
-        //{
-        //    try
-        //    {
-        //        var addFaults = new List<FAULTWARN>();
-        //        var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
-        //        var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
+        /// <summary>
+        /// 设备电流异常预警模型
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetSbdlFault()
+        {
+            try
+            {
+                var addFaults = new List<FAULTWARN>();
+                var nowData = await _db.Queryable<TB_PARSING_DATAS_NEWCS>().ToListAsync();
+               
+                var time = DateTime.Now;
+                var today = DateTime.Today;
 
-        //        var Warn1 = equipments.First(x => x.faultcode == "HVAC01L0100");
-        //        var Warn2 = equipments.First(x => x.faultcode == "HVAC01L0200");
-        //        var faultData = _db.Queryable<FAULTWARN>().Where(x => x.state == "0" && x.xdid == Warn1.id).ToList();
+                string sql = @"SELECT * FROM
+							    dbo.TB_PARSING_DATAS_YJ_2" + $"_{DateTime.Now:yyyyMMdd} " +
+                         @"WHERE
+								create_time >= DATEADD(MINUTE,-3,GETDATE())";
 
-        //        string sql = @"SELECT * FROM
-							 //   dbo.TB_PARSING_DATAS_YJ_2" + $"_{DateTime.Now:yyyyMMdd} " +
-        //                 @"WHERE
-								//create_time >= DATEADD(MINUTE,-30,GETDATE())";
+                var newDatas = await _db.SqlQueryable<TB_PARSING_DATAS_YJ_2>(sql).ToListAsync();
+                if (newDatas.Count == 0) return;
 
-        //        var newDatas = await _db.SqlQueryable<TB_PARSING_DATAS_YJ_2>(sql).ToListAsync();
-        //        if (newDatas.Count == 0) return;
+                foreach (var item in nowData)
+                {
+                    var data = newDatas.Where(x => x.device_code == item.device_code).OrderBy(x => x.rqDateTime).ToList();
+                    if (data.Count == 0) continue;
+                   
+                    var jz1zffj1 = HasConsecutiveFaults(data, Jz1zffj1yx, Jz1zffj1dl, 60, ZFFJ_I);
+                    var jz1zffj2 = HasConsecutiveFaults(data, Jz1zffj2yx, Jz1zffj2dl, 60, ZFFJ_I);
+                    var jz2zffj1 = HasConsecutiveFaults(data, Jz2zffj1yx, Jz2zffj1dl, 60, ZFFJ_I);
+                    var jz2zffj2 = HasConsecutiveFaults(data, Jz2zffj2yx, Jz2zffj2dl, 60, ZFFJ_I);
 
-        //        var jz1ysjzt = !newDatas.Any(x => x.jz1ysj1yx == "0" && x.jz1ysj2yx == "0");//压缩机是否存在停机状态
-        //        var jz2ysjzt = !newDatas.Any(x => x.jz2ysj1yx == "0" && x.jz2ysj2yx == "0");//
+                    var jz1lnfj1 = HasConsecutiveFaults(data, Jz1lnfj1yx, Jz1lnfj1dl, 60, LNFJ_I);
+                    var jz1lnfj2 = HasConsecutiveFaults(data, Jz1lnfj2yx, Jz1lnfj2dl, 60, LNFJ_I);
+                    var jz2lnfj1 = HasConsecutiveFaults(data, Jz2lnfj1yx, Jz2lnfj1dl, 60, LNFJ_I);
+                    var jz2lnfj2 = HasConsecutiveFaults(data, Jz2lnfj2yx, Jz2lnfj2dl, 60, LNFJ_I);
 
-        //        var time = DateTime.Now.AddMinutes(-5);
+                    var jz1ysj1 = HasConsecutiveFaults(data, Jz1ysj1yx, Jz1ysj1dl, 60 * 3, YSJ_I);
+                    var jz1ysj2 = HasConsecutiveFaults(data, Jz1ysj2yx, Jz1ysj2dl, 60 * 3, YSJ_I);
+                    var jz2ysj1 = HasConsecutiveFaults(data, Jz2ysj1yx, Jz2ysj1dl, 60 * 3, YSJ_I);
+                    var jz2ysj2 = HasConsecutiveFaults(data, Jz2ysj2yx, Jz2ysj2dl, 60 * 3, YSJ_I);
 
-        //        foreach (var item in nowData)
-        //        {
-        //            var isAny1 = faultData.Any(x => x.sbbm == item.device_code);
-        //            if (isAny1) continue;
+                    if (jz1zffj1)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC08L0110",item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz1zffj2)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC08L0120", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz2zffj1)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC08L0210", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz2zffj2)
+                    {     
+                        var addFault = await GetFAULTWARN("HVAC08L0220", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
 
-        //            var ysjdata = newDatas.Where(x => x.device_code == item.device_code && x.create_time >= time);
-        //            var newData = newDatas.Where(x => x.device_code == item.device_code);
+                    if (jz1lnfj1)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC09L0110", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz1lnfj2)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC09L0120", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz2lnfj1)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC09L0210", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz2lnfj2)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC09L0220", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
 
-        //            var isTrue5 = ysjdata.Any();
-        //            var isTrue6 = newData.Any();
+                    if (jz1ysj1)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC10L0110", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz1ysj2)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC10L0120", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz2ysj1)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC10L0210", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                    if (jz2ysj2)
+                    {
+                        var addFault = await GetFAULTWARN("HVAC10L0220", item, today);
+                        if (addFault != null) addFaults.Add(addFault);
+                    }
+                }
 
-        //            var isTrue1 = !ysjdata.Any(x => (Convert.ToDouble(x.jz1shfwd) - Convert.ToDouble(x.jz1mbwd)) <= 5) && isTrue5;
-        //            var isTrue2 = !ysjdata.Any(x => (Convert.ToDouble(x.jz2shfwd) - Convert.ToDouble(x.jz2mbwd)) <= 5) && isTrue5;
+                if (addFaults.Count > 0)
+                {
+                    var addnum = _db.Insertable(addFaults).ExecuteCommand();
+                    if (addnum > 0)
+                        Console.WriteLine($"制冷目标温度异常预警同步完成，新增了{addnum}条预警");
 
-        //            var isTrue3 = !newData.Any(x => (Convert.ToDouble(x.jz1shfwd) - Convert.ToDouble(x.jz1mbwd)) <= 3) && isTrue6;
-        //            var isTrue4 = !newData.Any(x => (Convert.ToDouble(x.jz2shfwd) - Convert.ToDouble(x.jz2mbwd)) <= 3) && isTrue6;
+                    var faultReq = await FaultSetHttpPost(addFaults);
+                    if (faultReq != null && faultReq.code == 200)
+                        Console.WriteLine($"制冷目标温度异常预警推送成功，新增了{addFaults.Count}条预警");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"制冷目标温度异常预警失败：{ex.ToString()}");
+            }
+        }
 
-        //            if ((jz1ysjzt && (isTrue1 || isTrue3)) || (jz2ysjzt && (isTrue2 || isTrue4)))
-        //            {
-        //                var addFault = GetFAULTWARN(item, Warn1);
-        //                addFaults.Add(addFault);
-        //            }
-        //        }
+        /// <summary>
+        /// 添加故障
+        /// </summary>
+        /// <param name="faultCode"></param>
+        /// <param name="item"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        private async Task<FAULTWARN?> GetFAULTWARN(string faultCode, TB_PARSING_DATAS_NEWCS item,DateTime time)
+        {
+            var equipments = await _db.Queryable<OVERHAULIDEA>().ToListAsync();
+            var faultData = await _db.Queryable<FAULTWARN>().Where(x => x.state == "0").ToListAsync();
 
-        //        if (addFaults.Count > 0)
-        //        {
-        //            var addnum = _db.Insertable(addFaults).ExecuteCommand();
-        //            if (addnum > 0)
-        //                Console.WriteLine($"制冷目标温度异常预警同步完成，新增了{addnum}条预警");
+            var Warn = equipments.First(x => x.faultcode == faultCode);
+            var F = !faultData.Any(x => x.xdid == Warn.id && x.sbbm == item.device_code && x.createtime > time);
+            if (F)
+            {
+                return GetFAULTWARN(item, Warn);               
+            }
+            return null;
+        }
 
-        //            var faultReq = await FaultSetHttpPost(addFaults);
-        //            if (faultReq != null && faultReq.code == 200)
-        //                Console.WriteLine($"制冷目标温度异常预警推送成功，新增了{addFaults.Count}条预警");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"制冷目标温度异常预警失败：{ex.ToString()}");
-        //    }
-        //}
+
+        static bool Jz1lnfj1yx(TB_PARSING_DATAS_YJ_2 x) => x.jz1lnfj1yx == "0";
+        static bool Jz1lnfj2yx(TB_PARSING_DATAS_YJ_2 x) => x.jz1lnfj2yx == "0";
+        static bool Jz2lnfj1yx(TB_PARSING_DATAS_YJ_2 x) => x.jz2lnfj1yx == "0";
+        static bool Jz2lnfj2yx(TB_PARSING_DATAS_YJ_2 x) => x.jz2lnfj2yx == "0";
+
+        static bool Jz1zffj1yx(TB_PARSING_DATAS_YJ_2 x) => x.jz1zffj1yx == "0";
+        static bool Jz1zffj2yx(TB_PARSING_DATAS_YJ_2 x) => x.jz1zffj2yx == "0";
+        static bool Jz2zffj1yx(TB_PARSING_DATAS_YJ_2 x) => x.jz2zffj1yx == "0";
+        static bool Jz2zffj2yx(TB_PARSING_DATAS_YJ_2 x) => x.jz2zffj2yx == "0";
+
+        static bool Jz1ysj1yx(TB_PARSING_DATAS_YJ_2 x) => x.jz1ysj1yx == "0";
+        static bool Jz1ysj2yx(TB_PARSING_DATAS_YJ_2 x) => x.jz1ysj2yx == "0";
+        static bool Jz2ysj1yx(TB_PARSING_DATAS_YJ_2 x) => x.jz2ysj1yx == "0";
+        static bool Jz2ysj2yx(TB_PARSING_DATAS_YJ_2 x) => x.jz2ysj2yx == "0";
+
+        static double Jz1zffj1dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz1zffj1yx);
+        static double Jz1zffj2dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz1zffj2yx);
+        static double Jz2zffj1dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz2zffj1yx);
+        static double Jz2zffj2dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz2zffj2yx);
+
+        static double Jz1lnfj1dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz1lnfj1dl);
+        static double Jz1lnfj2dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz1lnfj2dl);
+        static double Jz2lnfj1dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz2lnfj1dl);
+        static double Jz2lnfj2dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz2lnfj2dl);
+
+        static double Jz1ysj1dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz1ysj1dl);
+        static double Jz1ysj2dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz1ysj2dl);
+        static double Jz2ysj1dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz2ysj1dl);
+        static double Jz2ysj2dl(TB_PARSING_DATAS_YJ_2 x) => Convert.ToDouble(x.jz2ysj2dl);
+
+
+        static bool ZFFJ_I(double I) => I >= 0.8 && I <= 2.3;
+        static bool LNFJ_I(double I) => I >= 1.8 && I <= 2.7;
+        static bool YSJ_I(double I) => I >= 9 && I <= 22;
+   
+        //定义一个委托
+        public delegate bool SampleCheck(double sample);
+
+        // 检查列表中是否有连续n个数据异常
+        public bool HasConsecutiveFaults<T>(List<T> data, Func<T, bool> yxzt, Func<T, double> selector, int n, SampleCheck check)
+        {
+            if (data == null || n <= 0)
+            {
+                _logger.LogError("预警失败，数据不符合预警条件（空集合或n小于等于0）。");
+                return false;
+            }
+            var any = data.Any(yxzt);
+
+            if (any) return false;
+
+            var samples = data.Select(selector).ToList();
+            if (n > samples.Count)
+            {
+                _logger.LogError("预警失败，n大于数据集中的元素数量。");
+                return false;
+            }
+
+            for (int i = 0; i <= samples.Count - n; i++)
+            {
+                bool allFaulty = true;
+                for (int j = 0; j < n; j++)
+                {
+                    if (!check(samples[i + j]))
+                    {
+                        allFaulty = false;
+                        break;
+                    }
+                }
+                if (allFaulty)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
 
         /// <summary>
         /// 寿命预警模型
